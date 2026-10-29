@@ -10,9 +10,9 @@ export async function GET(_req: Request, { params }: { params: Promise<{ token: 
   const base = `/kiosk/${token}`;
   const manifest = {
     id: base,
-    name: "Autopedido",
-    short_name: "Autopedido",
-    description: "Autopedido para clientes",
+    name: "BillBaaz Kiosk",
+    short_name: "BillBaaz Kiosk",
+    description: "Self-service ordering kiosk by BillBaaz",
     start_url: base,
     scope: `${base}`,
     display: "fullscreen",

@@ -56,15 +56,15 @@ const features = [
   },
   {
     icon: GitBranch,
-    title: "Open source, no lock-in",
+    title: "Commercial & offline-ready",
     description:
-      "AGPL-3.0 licensed. Self-host on Docker, CasaOS/ZimaOS, or a Windows client — your data never has to leave your building.",
+      "Enterprise POS architecture. Deploy on Cloud, Docker, or Windows kiosk — your restaurant never stops even when internet goes down.",
   },
   {
     icon: Plug,
-    title: "API & MCP integrations",
+    title: "Hardware, Soundbox & API integrations",
     description:
-      "Connect an MCP client like Claude Desktop with your own permissions, or issue a scoped API key so your website can browse the menu, place orders, and book tables through OrderRestro directly.",
+      "Connect Pine Labs / Paytm POS EDC machines, dynamic Soundbox announcements, Swiggy/Zomato webhooks, and thermal receipt printers directly through BillBaaz.",
   },
 ];
 

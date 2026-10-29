@@ -11,12 +11,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { token } = await params;
   return {
-    title: "Autopedido",
-    description: "Pide aquí",
+    title: "BillBaaz Kiosk — Self-Order",
+    description: "Order fresh food and beverages with BillBaaz",
     // Per-token manifest so "Add to Home screen" opens THIS kiosk, not "/".
     manifest: `/kiosk/${encodeURIComponent(token)}/manifest.webmanifest`,
     robots: { index: false, follow: false },
-    appleWebApp: { capable: true, title: "Autopedido", statusBarStyle: "black-translucent" },
+    appleWebApp: { capable: true, title: "BillBaaz Kiosk", statusBarStyle: "black-translucent" },
     formatDetection: { telephone: false },
   };
 }

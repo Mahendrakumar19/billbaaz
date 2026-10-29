@@ -46,7 +46,7 @@ async function main() {
     update: {},
     create: {
       id: 'demo-restaurant',
-      name: 'Nodedr Bistro (Demo)',
+      name: 'BillBaaz Grand Cafe',
       currency: 'INR',
     },
   });
@@ -57,8 +57,8 @@ async function main() {
     create: {
       id: 'demo-branch',
       restaurantId: restaurant.id,
-      name: 'Main Branch',
-      address: '123 Demo Street',
+      name: 'Bandra West (Flagship)',
+      address: 'Linking Road, Bandra West, Mumbai 400050',
     },
   });
 
@@ -120,6 +120,33 @@ async function main() {
     where: { userId_branchId: { userId: owner.id, branchId: branch.id } },
     update: {},
     create: { userId: owner.id, branchId: branch.id },
+  });
+
+  const adminBillbaaz = await prisma.user.upsert({
+    where: {
+      restaurantId_email: {
+        restaurantId: restaurant.id,
+        email: 'admin@billbaaz.com',
+      },
+    },
+    update: {
+      passwordHash,
+      pinHash,
+    },
+    create: {
+      restaurantId: restaurant.id,
+      roleId: ownerRoleId,
+      name: 'BillBaaz Administrator',
+      email: 'admin@billbaaz.com',
+      passwordHash,
+      pinHash,
+    },
+  });
+
+  await prisma.userBranch.upsert({
+    where: { userId_branchId: { userId: adminBillbaaz.id, branchId: branch.id } },
+    update: {},
+    create: { userId: adminBillbaaz.id, branchId: branch.id },
   });
 
   console.log('Seeding floor + tables...');

@@ -37,7 +37,7 @@ export function BranchProvider({ children }: { children: React.ReactNode }) {
   // then a pure derivation from this plus the fetched branches, so no
   // effect/setState is needed to keep them in sync.
   const [manualBranchId, setManualBranchId] = useState<string | null>(() =>
-    typeof window !== "undefined" ? (localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem("nodedr_branch_id")) : null,
+    typeof window !== "undefined" ? (localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem("billbaaz_branch_id")) : null,
   );
 
   const branchId = useMemo(() => {
