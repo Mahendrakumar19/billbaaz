@@ -269,7 +269,7 @@ export class AggregatorsController {
     return {
       feed,
       stats: {
-        activeCount: feed.filter((f) => f.status === 'OPEN' || f.status === 'ACCEPTED').length,
+        activeCount: feed.filter((f) => f.status === 'OPEN').length,
         zomatoCount: feed.filter((f) => f.channel === 'ZOMATO').length,
         swiggyCount: feed.filter((f) => f.channel === 'SWIGGY').length,
       },
