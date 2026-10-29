@@ -133,19 +133,27 @@ export default function SignupPage() {
           </Link>
         </p>
 
-        <p className="mt-6 text-center text-xs text-muted-foreground flex items-center justify-center gap-1">
-          <span>Made with</span>
-          <span className="text-rose-500">❤️</span>
-          <span>in India by</span>
+        <div className="mt-6 text-center text-xs text-muted-foreground flex flex-col items-center gap-0.5">
+          <p>
+            Made with pride in India by{" "}
+            <a
+              href="https://nighwantech.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-foreground hover:text-primary hover:underline transition-colors"
+            >
+              Nighwan Technology Pvt. Ltd.
+            </a>
+          </p>
           <a
             href="https://nighwantech.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-semibold text-foreground hover:text-primary hover:underline transition-colors"
+            className="text-[11px] font-mono text-muted-foreground hover:text-primary hover:underline transition-colors"
           >
-            Nighwan Technology
+            nighwantech.com
           </a>
-        </p>
+        </div>
       </motion.div>
     </main>
   );
