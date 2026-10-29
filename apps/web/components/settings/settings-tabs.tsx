@@ -28,6 +28,7 @@ const TABS: SettingsTab[] = [
   { label: "Server Sync", href: "/settings/sync", permission: "settings.manage" },
   { label: "API Keys", href: "/settings/api-keys" },
   { label: "Security", href: "/settings/security" },
+  { label: "Hardware & Aggregators", href: "/settings/hardware" },
   { label: "Webhooks", href: "/settings/webhooks", permission: "settings.manage" },
   { label: "VERI*FACTU", href: "/settings/verifactu", permission: "settings.manage", country: "ES" },
 ];

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 110" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bb-l-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FC6602" />
+      <stop offset="100%" stop-color="#E35300" />
+    </linearGradient>
+    <linearGradient id="bb-l-navy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F2F4F" />
+      <stop offset="100%" stop-color="#0A1F36" />
+    </linearGradient>
+  </defs>
+
+  <!-- Falcon Speed Emblem -->
+  <g transform="translate(10, 11)">
+    <rect width="88" height="88" rx="20" fill="url(#bb-l-bg)" />
+    <!-- Speed Lines on left -->
+    <rect x="-6" y="24" width="14" height="6" rx="3" fill="#FC6602" />
+    <rect x="-12" y="38" width="20" height="6" rx="3" fill="#FC6602" />
+    <rect x="-4" y="52" width="12" height="6" rx="3" fill="#FC6602" />
+    
+    <!-- Bold 'B' Falcon Form inside -->
+    <path d="M 32 18 L 56 18 C 66 18, 72 24, 72 32 C 72 38, 68 44, 60 46 C 70 48, 74 56, 74 64 C 74 74, 66 80, 54 80 L 32 80 Z" fill="#0F2F4F" />
+    <!-- White Receipt / Falcon Head overlay -->
+    <path d="M 40 26 L 56 26 C 62 26, 66 30, 66 35 C 66 40, 62 44, 56 44 L 40 44 Z" fill="#FFFFFF" />
+    <path d="M 40 52 L 56 52 C 63 52, 67 56, 67 62 C 67 68, 63 72, 56 72 L 40 72 Z" fill="#FFFFFF" />
+    <circle cx="58" cy="34" r="3" fill="#FC6602" />
+  </g>
+
+  <!-- Brand Typography -->
+  <g transform="translate(118, 0)">
+    <!-- Primary Title: BillBaaz -->
+    <text x="0" y="58" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="46" letter-spacing="-1.2">
+      <tspan fill="#0F2F4F">Bill</tspan><tspan fill="#FC6602">Baaz</tspan>
+    </text>
+
+    <!-- Tagline: Billing Ka Baaz! -->
+    <text x="2" y="86" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-weight="700" font-size="16" letter-spacing="0.8" fill="#0F2F4F">
+      Billing Ka Baaz!
+    </text>
+  </g>
+</svg>

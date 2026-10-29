@@ -298,9 +298,9 @@ export class WebhooksService {
         netOptionsFromEnv(),
       );
       statusCode = await this.post(target, body, {
-        'X-OrderRestro-Event': d.event,
-        'X-OrderRestro-Delivery': d.id,
-        'X-OrderRestro-Signature': signPayload(
+        'X-BillBaaz-Event': d.event,
+        'X-BillBaaz-Delivery': d.id,
+        'X-BillBaaz-Signature': signPayload(
           secret,
           body,
           Math.floor(Date.now() / 1000),

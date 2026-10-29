@@ -67,9 +67,9 @@ export default function LoginPage() {
             <Logo size={44} />
           </Link>
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-            Nodedr OrderRestro
+            BillBaaz
           </h1>
-          <p className="text-sm text-muted-foreground">Sign in to manage your restaurant</p>
+          <p className="text-sm text-muted-foreground">Billing ka baazigar · Sign in</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
@@ -98,7 +98,6 @@ export default function LoginPage() {
             <Label htmlFor="password">Password</Label>
             <PasswordInput
               id="password"
-              
               autoComplete="current-password"
               enterKeyHint="go"
               className="h-11"

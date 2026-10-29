@@ -278,7 +278,7 @@ export function buildReceiptHtml({
     <p class="footer">${
       order.isProvisional
         ? 'Bill only &mdash; not a receipt. Payment pending.'
-        : 'Thank you! Visit again.'
+        : 'Thank you! Visit again.<br><span style="font-size: 9px; color: #777;">Powered by BillBaaz — Billing ka baazigar</span>'
     }</p>
   </div>
 </body>

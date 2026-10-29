@@ -9,6 +9,7 @@ import { NotificationBell } from "@/components/notifications/notification-bell";
 import { useBranch } from "@/hooks/use-branch";
 import { useSettings } from "@/hooks/use-settings";
 import { BrandFooter } from "./brand-footer";
+import { PosAutoLockModal } from "@/components/pos/pos-autolock-modal";
 import { BranchSwitcher } from "./branch-switcher";
 import { LanguageSwitcher } from "./language-switcher";
 import { Logo } from "./logo";
@@ -16,12 +17,6 @@ import { MobileBottomNav } from "./mobile-bottom-nav";
 import { SidebarNav } from "./sidebar-nav";
 import { UserMenu } from "./user-menu";
 
-// The restaurant's own logo + name lead the sidebar header — this is
-// white-label self-hosted software, so the operator's branding takes the
-// prime spot an operator actually looks at. The Nodedr OrderRestro product
-// mark moves to a small credit line at the bottom (BrandFooter) instead of
-// competing with it up here. Falls back to the product mark only until the
-// restaurant sets its own logo/name under Settings.
 function RestaurantBrand() {
   const { branchId } = useBranch();
   const { data } = useSettings(branchId);
@@ -47,7 +42,7 @@ function RestaurantBrand() {
     <>
       <Logo />
       <span className="truncate text-sm font-semibold tracking-tight text-sidebar-foreground">
-        {restaurant?.name ?? "Nodedr OrderRestro"}
+        {restaurant?.name ?? "BillBaaz"}
       </span>
     </>
   );
@@ -113,6 +108,7 @@ export function AppShell({
           </div>
         </header>
         <main className="flex-1 overflow-y-auto p-4 pb-24 sm:p-6 sm:pb-24 lg:p-8">{children}</main>
+      <PosAutoLockModal />
         <EntityDialogHost />
       </div>
       <MobileBottomNav user={user} onMore={() => setMobileOpen(true)} />

@@ -251,7 +251,7 @@ export function buildReceiptEscPosJob({
   w.text(
     order.isProvisional
       ? 'Bill only - not a receipt. Payment pending.'
-      : 'Thank you! Visit again.',
+      : 'Thank you! Visit again.\nPowered by BillBaaz - Billing ka baazigar',
     { align: 'center' },
   );
   return {

@@ -1311,6 +1311,7 @@ export class OrdersService {
       loyaltyDiscountRequested:
         pointsToRedeem * Number(branch.restaurant.loyaltyPointValue),
       tip: adj.tipAmount,
+      serviceChargePercent: adj.serviceChargePercent,
       deliveryFee: Number(order.deliveryFee),
     });
     return { bill, locked, paid, auto, pointsToRedeem };
@@ -1406,6 +1407,8 @@ export class OrdersService {
         discountPercent: view.discountPercent,
         taxAmount: view.taxAmount,
         tipAmount: view.tipAmount,
+        serviceChargePercent: (view as any).serviceChargePercent ?? 0,
+        serviceChargeAmount: (view as any).serviceChargeAmount ?? 0,
         loyaltyPointsRedeemed: view.loyaltyPointsRedeemed,
         loyaltyDiscountAmount: view.loyaltyDiscountAmount,
         totalAmount: view.totalDue,
@@ -1915,6 +1918,214 @@ export class OrdersService {
     });
 
     return refund;
+  }
+
+  async splitOrder(
+    branchId: string,
+    orderId: string,
+    userId: string,
+    dto: SplitOrderDto,
+  ) {
+    const sourceOrder = await this.prisma.order.findFirst({
+      where: { id: orderId, branchId },
+      include: {
+        items: {
+          include: {
+            modifiers: true,
+            kotItems: true,
+          },
+        },
+        payments: { select: { id: true } },
+      },
+    });
+
+    if (!sourceOrder) throw new NotFoundException('Order not found');
+    if (sourceOrder.status !== 'OPEN') {
+      throw new BadRequestException('Only open orders can be split');
+    }
+    this.assertNoPayments(sourceOrder);
+
+    // Validate split items
+    const sourceItemMap = new Map(sourceOrder.items.map((i) => [i.id, i]));
+    for (const splitItem of dto.items) {
+      const existing = sourceItemMap.get(splitItem.orderItemId);
+      if (!existing) {
+        throw new BadRequestException(`Item ${splitItem.orderItemId} does not belong to this order`);
+      }
+      if (splitItem.quantity > existing.quantity) {
+        throw new BadRequestException(
+          `Cannot split ${splitItem.quantity} of "${existing.nameSnapshot}" - only ${existing.quantity} available`,
+        );
+      }
+    }
+
+    // Check if splitting away the ENTIRE order
+    const isSplittingAll = dto.items.every((si) => {
+      const ex = sourceItemMap.get(si.orderItemId)!;
+      return si.quantity === ex.quantity;
+    }) && dto.items.length === sourceOrder.items.length;
+
+    if (isSplittingAll) {
+      throw new BadRequestException('Cannot split all items away. Use table transfer instead.');
+    }
+
+    const newOrderNumber = await this.nextOrderNumber(branchId);
+
+    const result = await this.prisma.$transaction(async (tx) => {
+      // 1. Create target order
+      const newOrder = await tx.order.create({
+        data: {
+          branchId,
+          orderNumber: newOrderNumber,
+          type: sourceOrder.type,
+          channel: sourceOrder.channel,
+          acceptance: 'NOT_REQUIRED',
+          tableId: dto.targetTableId ?? sourceOrder.tableId,
+          guestName: dto.targetGuestName ?? (sourceOrder.guestName ? `${sourceOrder.guestName} (Split)` : null),
+          guestCount: 1,
+          status: 'OPEN',
+          subtotal: 0,
+          taxAmount: 0,
+          totalAmount: 0,
+          notes: `Split from order #${sourceOrder.orderNumber}`,
+        },
+      });
+
+      // 2. Move or split item rows
+      for (const splitReq of dto.items) {
+        const item = sourceItemMap.get(splitReq.orderItemId)!;
+        const unitPrice = Number(item.unitPriceSnapshot);
+        const taxRate = Number(item.taxRateSnapshot);
+
+        if (splitReq.quantity === item.quantity) {
+          // Transfer entire item to new order
+          await tx.orderItem.update({
+            where: { id: item.id },
+            data: { orderId: newOrder.id },
+          });
+        } else {
+          // Partial quantity split: decrease source item quantity and lineTotal
+          const remainingQty = item.quantity - splitReq.quantity;
+          const remainingLine = priceLine({
+            quantity: remainingQty,
+            unitPriceInclusive: Number(item.lineTotal) / item.quantity,
+            taxRatePercent: taxRate,
+          });
+
+          await tx.orderItem.update({
+            where: { id: item.id },
+            data: {
+              quantity: remainingQty,
+              lineTotal: remainingLine.lineTotal,
+            },
+          });
+
+          // Create new item on new order
+          const newLine = priceLine({
+            quantity: splitReq.quantity,
+            unitPriceInclusive: Number(item.lineTotal) / item.quantity,
+            taxRatePercent: taxRate,
+          });
+
+          const createdItem = await tx.orderItem.create({
+            data: {
+              orderId: newOrder.id,
+              menuItemId: item.menuItemId,
+              nameSnapshot: item.nameSnapshot,
+              unitPriceSnapshot: item.unitPriceSnapshot,
+              taxRateSnapshot: item.taxRateSnapshot,
+              quantity: splitReq.quantity,
+              lineTotal: newLine.lineTotal,
+              kitchenNote: item.kitchenNote,
+              status: item.status,
+            },
+          });
+
+          // Duplicate modifier snapshots if any
+          for (const mod of item.modifiers) {
+            await tx.orderItemModifier.create({
+              data: {
+                orderItemId: createdItem.id,
+                modifierId: mod.modifierId,
+                nameSnapshot: mod.nameSnapshot,
+                priceAdjustmentSnapshot: mod.priceAdjustmentSnapshot,
+              },
+            });
+          }
+        }
+      }
+
+      // 3. Recalculate totals for source order
+      const remainingItems = await tx.orderItem.findMany({
+        where: { orderId: sourceOrder.id },
+      });
+      const sourceLines = remainingItems.map((i) =>
+        priceLine({
+          quantity: i.quantity,
+          unitPriceInclusive: Number(i.lineTotal) / i.quantity,
+          taxRatePercent: Number(i.taxRateSnapshot),
+        }),
+      );
+      const sourceTotals = computeOrderTotals(sourceLines);
+      await tx.order.update({
+        where: { id: sourceOrder.id },
+        data: {
+          subtotal: sourceTotals.subtotal,
+          taxAmount: sourceTotals.taxAmount,
+          totalAmount: sourceTotals.subtotal,
+        },
+      });
+
+      // 4. Recalculate totals for new order
+      const newItems = await tx.orderItem.findMany({
+        where: { orderId: newOrder.id },
+      });
+      const newLines = newItems.map((i) =>
+        priceLine({
+          quantity: i.quantity,
+          unitPriceInclusive: Number(i.lineTotal) / i.quantity,
+          taxRatePercent: Number(i.taxRateSnapshot),
+        }),
+      );
+      const newTotals = computeOrderTotals(newLines);
+      await tx.order.update({
+        where: { id: newOrder.id },
+        data: {
+          subtotal: newTotals.subtotal,
+          taxAmount: newTotals.taxAmount,
+          totalAmount: newTotals.subtotal,
+        },
+      });
+
+      return {
+        sourceOrderId: sourceOrder.id,
+        targetOrderId: newOrder.id,
+        targetOrderNumber: newOrder.orderNumber,
+      };
+    });
+
+    await this.audit.record({
+      branchId,
+      userId,
+      action: 'orders.split',
+      entity: 'Order',
+      entityId: orderId,
+      metadata: {
+        sourceOrderNumber: sourceOrder.orderNumber,
+        targetOrderId: result.targetOrderId,
+        targetOrderNumber: result.targetOrderNumber,
+        itemsSplit: dto.items,
+      },
+    });
+
+    this.realtime.emitToBranch(branchId, 'order.updated', { id: orderId });
+    this.realtime.emitToBranch(branchId, 'order.created', { id: result.targetOrderId });
+
+    return {
+      success: true,
+      sourceOrder: await this.getOrder(branchId, orderId),
+      targetOrder: await this.getOrder(branchId, result.targetOrderId),
+    };
   }
 
   async mergeOrders(

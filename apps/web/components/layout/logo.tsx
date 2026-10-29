@@ -5,10 +5,10 @@ export function Logo({ className, size = 32 }: { className?: string; size?: numb
   return (
     <Image
       src="/logo.png"
-      alt="Nodedr OrderRestro"
+      alt="BillBaaz"
       width={size}
       height={size}
-      className={cn("shrink-0 rounded-lg object-contain", className)}
+      className={cn("shrink-0 object-contain", className)}
       priority
     />
   );

@@ -51,78 +51,78 @@
 }
 
 :root {
-  /* Nodedr OrderRestro — light palette. See DESIGN_SYSTEM.md for rationale
-     (wine/burgundy primary is the one deliberate accent choice). */
-  --background: #FBF9F8;
-  --foreground: #111827;
+  /* BillBaaz — Light palette aligned with the official logo (Falcon Orange + Royal Navy). */
+  --background: #F8FAFC;
+  --foreground: #0A1F36;
   --card: #FFFFFF;
-  --card-foreground: #111827;
+  --card-foreground: #0A1F36;
   --popover: #FFFFFF;
-  --popover-foreground: #111827;
-  --primary: #9F1239;
+  --popover-foreground: #0A1F36;
+  --primary: #FC6602;
   --primary-foreground: #FFFFFF;
-  --secondary: #F5F1F0;
-  --secondary-foreground: #111827;
-  --muted: #F5F1F0;
-  --muted-foreground: #6B7280;
-  --accent: #FDF2F4;
-  --accent-foreground: #9F1239;
+  --secondary: #F1F5F9;
+  --secondary-foreground: #0F2F4F;
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
+  --accent: #FFF7ED;
+  --accent-foreground: #EA580C;
   --destructive: #EF4444;
-  --success: #22C55E;
+  --success: #10B981;
   --warning: #F59E0B;
-  --border: #ECE6E4;
-  --input: #E4DCDA;
-  --ring: #9F1239;
-  --chart-1: #9F1239;
-  --chart-2: #22C55E;
+  --border: #E2E8F0;
+  --input: #CBD5E1;
+  --ring: #FC6602;
+  --chart-1: #FC6602;
+  --chart-2: #10B981;
   --chart-3: #F59E0B;
-  --chart-4: #6366F1;
-  --chart-5: #6B7280;
+  --chart-4: #0F2F4F;
+  --chart-5: #64748B;
   --radius: 1rem;
-  --sidebar: #FFFDFC;
-  --sidebar-foreground: #111827;
-  --sidebar-primary: #9F1239;
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #0A1F36;
+  --sidebar-primary: #FC6602;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #FDF2F4;
-  --sidebar-accent-foreground: #9F1239;
-  --sidebar-border: #ECE6E4;
-  --sidebar-ring: #9F1239;
+  --sidebar-accent: #FFF7ED;
+  --sidebar-accent-foreground: #EA580C;
+  --sidebar-border: #E2E8F0;
+  --sidebar-ring: #FC6602;
 }
 
 .dark {
-  --background: #0B0B0D;
-  --foreground: #F4F4F5;
-  --card: #151517;
-  --card-foreground: #F4F4F5;
-  --popover: #151517;
-  --popover-foreground: #F4F4F5;
-  --primary: #FB7185;
-  --primary-foreground: #1F0A0F;
-  --secondary: #1D1D20;
-  --secondary-foreground: #F4F4F5;
-  --muted: #1D1D20;
-  --muted-foreground: #9CA3AF;
-  --accent: #2A151A;
-  --accent-foreground: #FB7185;
+  /* BillBaaz — Dark palette (Deep Royal Midnight Navy + Luminous Falcon Orange). */
+  --background: #07111D;
+  --foreground: #F8FAFC;
+  --card: #0D1E33;
+  --card-foreground: #F8FAFC;
+  --popover: #0D1E33;
+  --popover-foreground: #F8FAFC;
+  --primary: #FF7A1A;
+  --primary-foreground: #07111D;
+  --secondary: #132B47;
+  --secondary-foreground: #F8FAFC;
+  --muted: #132B47;
+  --muted-foreground: #94A3B8;
+  --accent: #1C3759;
+  --accent-foreground: #FF964A;
   --destructive: #F87171;
   --success: #34D399;
   --warning: #FBBF24;
-  --border: #26262A;
-  --input: #26262A;
-  --ring: #FB7185;
-  --chart-1: #FB7185;
+  --border: #1E3A5F;
+  --input: #1E3A5F;
+  --ring: #FF7A1A;
+  --chart-1: #FF7A1A;
   --chart-2: #34D399;
   --chart-3: #FBBF24;
-  --chart-4: #818CF8;
-  --chart-5: #9CA3AF;
-  --sidebar: #111113;
-  --sidebar-foreground: #F4F4F5;
-  --sidebar-primary: #FB7185;
-  --sidebar-primary-foreground: #1F0A0F;
-  --sidebar-accent: #2A151A;
-  --sidebar-accent-foreground: #FB7185;
-  --sidebar-border: #26262A;
-  --sidebar-ring: #FB7185;
+  --chart-4: #38BDF8;
+  --chart-5: #94A3B8;
+  --sidebar: #091626;
+  --sidebar-foreground: #F8FAFC;
+  --sidebar-primary: #FF7A1A;
+  --sidebar-primary-foreground: #07111D;
+  --sidebar-accent: #132B47;
+  --sidebar-accent-foreground: #FF964A;
+  --sidebar-border: #1E3A5F;
+  --sidebar-ring: #FF7A1A;
 }
 
 /* Customer kiosk (/kiosk/*): always the light palette, whatever the device's
@@ -131,36 +131,32 @@
    utilities are unaffected. */
 .kiosk-root {
   color-scheme: light;
-  --background: #FBF9F8;
-  --foreground: #111827;
+  --background: #F8FAFC;
+  --foreground: #0A1F36;
   --card: #FFFFFF;
-  --card-foreground: #111827;
+  --card-foreground: #0A1F36;
   --popover: #FFFFFF;
-  --popover-foreground: #111827;
-  --primary: #9F1239;
+  --popover-foreground: #0A1F36;
+  --primary: #FC6602;
   --primary-foreground: #FFFFFF;
-  --secondary: #F5F1F0;
-  --secondary-foreground: #111827;
-  --muted: #F5F1F0;
-  --muted-foreground: #4B5563;
-  --accent: #FDF2F4;
-  --accent-foreground: #9F1239;
-  --destructive: #B91C1C;
-  --success: #15803D;
-  --warning: #B45309;
-  --border: #D9CFCC;
-  --input: #C9BDBA;
-  --ring: #9F1239;
+  --secondary: #F1F5F9;
+  --secondary-foreground: #0F2F4F;
+  --muted: #F1F5F9;
+  --muted-foreground: #475569;
+  --accent: #FFF7ED;
+  --accent-foreground: #EA580C;
+  --destructive: #DC2626;
+  --success: #16A34A;
+  --warning: #D97706;
+  --border: #CBD5E1;
+  --input: #94A3B8;
+  --ring: #FC6602;
   /* Explicit system fallbacks so the kiosk never renders in a serif face if the
      bundled web font is unavailable (offline start-up, blocked fonts CDN). */
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
 }
 
-/* The dashboard's coarse-pointer rule above sets a 44px floor on every
-   button/input. It is unlayered, so it would silently beat any Tailwind
-   min-height on kiosk controls; the kiosk's own (larger) 48px floor must be
-   unlayered too and more specific. Bigger tiles get their height from padding. */
 .kiosk-root button,
 .kiosk-root [role="button"],
 .kiosk-root input {
@@ -182,13 +178,6 @@
   }
 }
 
-/* This app is designed to run on a counter/kitchen tablet, not just a desk
-   with a mouse. The component library's default control heights (h-7/h-8,
-   ~28-32px) are comfortable with a pointer's pixel-precise click but too
-   small to reliably tap — Apple/Google both put the minimum comfortable
-   touch target around 44px. Gated on `pointer: coarse` (a real touchscreen,
-   not just a narrow viewport) so mouse-driven desktop use keeps the denser
-   layout the design system was built around. */
 @media (pointer: coarse) {
   button,
   [role="button"],
@@ -208,10 +197,6 @@
   }
 }
 
-/* Small celebratory burst on the QR order confirmation screen — see
-   components/order/pop-burst.tsx. Each particle rotates to its own
-   --angle, then the keyframes only need to translate outward along one
-   axis for every particle to fan out in a circle. */
 @keyframes pop-burst {
   0% {
     transform: rotate(var(--angle)) translateY(0) scale(0);
@@ -231,19 +216,17 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Premium finish. Everything below sits in @layer so Tailwind utilities
-   (rounded-*, bg-*, shadow-*) on a component still win over it — unlayered
-   rules would silently beat every utility class.
+   BillBaaz Premium finish.
    --------------------------------------------------------------------------- */
 :root {
-  --shadow-card: 0 1px 2px rgb(17 24 39 / 0.04), 0 8px 24px -12px rgb(76 14 34 / 0.10);
-  --shadow-card-hover: 0 2px 4px rgb(17 24 39 / 0.05), 0 16px 32px -14px rgb(76 14 34 / 0.18);
-  --gradient-primary: linear-gradient(135deg, #B3163F 0%, #9F1239 45%, #7A0E2C 100%);
+  --shadow-card: 0 1px 3px rgb(15 47 79 / 0.05), 0 8px 24px -12px rgb(252 102 2 / 0.12);
+  --shadow-card-hover: 0 4px 6px rgb(15 47 79 / 0.06), 0 16px 32px -14px rgb(252 102 2 / 0.22);
+  --gradient-primary: linear-gradient(135deg, #FF801E 0%, #FC6602 50%, #E35300 100%);
 }
 .dark {
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 28px -14px rgb(0 0 0 / 0.6);
-  --shadow-card-hover: 0 2px 4px rgb(0 0 0 / 0.45), 0 18px 36px -14px rgb(251 113 133 / 0.18);
-  --gradient-primary: linear-gradient(135deg, #FB7185 0%, #F43F5E 55%, #E11D48 100%);
+  --shadow-card: 0 1px 3px rgb(0 0 0 / 0.5), 0 10px 28px -14px rgb(0 0 0 / 0.7);
+  --shadow-card-hover: 0 4px 8px rgb(0 0 0 / 0.6), 0 18px 36px -14px rgb(255 122 26 / 0.25);
+  --gradient-primary: linear-gradient(135deg, #FFA057 0%, #FF7A1A 50%, #EA580C 100%);
 }
 
 @layer base {
@@ -254,15 +237,15 @@
   }
   body {
     background-image:
-      radial-gradient(60rem 28rem at 100% -10%, rgb(159 18 57 / 0.045), transparent 60%),
-      radial-gradient(48rem 24rem at -10% 110%, rgb(245 158 11 / 0.035), transparent 60%);
+      radial-gradient(60rem 28rem at 100% -10%, rgb(252 102 2 / 0.045), transparent 60%),
+      radial-gradient(48rem 24rem at -10% 110%, rgb(15 47 79 / 0.045), transparent 60%);
     background-attachment: fixed;
   }
   h1, h2, h3 {
     letter-spacing: -0.015em;
   }
   ::selection {
-    background: rgb(159 18 57 / 0.18);
+    background: rgb(252 102 2 / 0.20);
   }
   :focus-visible {
     outline: 2px solid var(--ring);
@@ -271,9 +254,6 @@
 }
 
 @layer components {
-  /* The tabs bar is a fixed h-8, but touch targets inside it are forced to
-     44px above — let the bar grow with them, and scroll sideways instead of
-     overflowing when there are more tabs than the screen is wide. */
   @media (pointer: coarse) {
     [data-slot="tabs-list"] {
       height: auto;
@@ -310,7 +290,7 @@
   [data-slot="button"][data-variant="default"],
   button[data-slot="button"].bg-primary {
     background-image: var(--gradient-primary);
-    box-shadow: 0 1px 0 rgb(255 255 255 / 0.18) inset, 0 6px 14px -6px rgb(159 18 57 / 0.55);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.22) inset, 0 6px 14px -6px rgb(252 102 2 / 0.50);
     transition: filter 150ms ease, transform 150ms ease, box-shadow 150ms ease;
   }
   [data-slot="button"][data-variant="default"]:hover:not(:disabled) {

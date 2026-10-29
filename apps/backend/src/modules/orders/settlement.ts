@@ -23,6 +23,7 @@ export interface BillInput {
   /** Currency value of the loyalty points the guest wants to redeem. */
   loyaltyDiscountRequested?: number;
   tip?: number;
+  serviceChargePercent?: number;
   deliveryFee?: number;
 }
 
@@ -36,6 +37,8 @@ export interface Bill {
   taxAmount: number;
   loyaltyDiscountAmount: number;
   tipAmount: number;
+  serviceChargePercent: number;
+  serviceChargeAmount: number;
   deliveryFee: number;
   /** What the guest owes: subtotal - discounts - loyalty + tip + delivery. */
   totalDue: number;

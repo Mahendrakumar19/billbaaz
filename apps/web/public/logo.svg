@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bb-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FC6602" />
+      <stop offset="100%" stop-color="#E35300" />
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded App Icon Background -->
+  <rect width="120" height="120" rx="28" fill="url(#bb-bg)" />
+  
+  <!-- Speed Lines -->
+  <rect x="10" y="32" width="20" height="8" rx="4" fill="#FFFFFF" opacity="0.9" />
+  <rect x="4" y="52" width="28" height="8" rx="4" fill="#FFFFFF" opacity="0.9" />
+  <rect x="12" y="72" width="18" height="8" rx="4" fill="#FFFFFF" opacity="0.9" />
+
+  <!-- B Falcon Body in Deep Navy -->
+  <g transform="translate(18, 6)">
+    <path d="M 32 20 L 58 20 C 69 20, 76 27, 76 36 C 76 43, 71 49, 63 52 C 73 55, 78 63, 78 72 C 78 83, 69 90, 56 90 L 32 90 Z" fill="#0F2F4F" />
+    <path d="M 40 28 L 56 28 C 63 28, 68 32, 68 38 C 68 44, 63 48, 56 48 L 40 48 Z" fill="#FFFFFF" />
+    <path d="M 40 58 L 56 58 C 64 58, 69 62, 69 70 C 69 77, 64 81, 56 81 L 40 81 Z" fill="#FFFFFF" />
+    <circle cx="60" cy="36" r="3.5" fill="#FC6602" />
+  </g>
+</svg>

@@ -67,6 +67,8 @@ export interface BillPreview {
   loyaltyPointsRedeemed: number;
   loyaltyDiscountAmount: number;
   tipAmount: number;
+  serviceChargePercent?: number;
+  serviceChargeAmount?: number;
   deliveryFee: number;
   totalDue: number;
   amountPaid: number;
@@ -75,7 +77,7 @@ export interface BillPreview {
 
 export type BillAdjustments = Pick<
   CheckoutDto,
-  "discountPercent" | "tipAmount" | "loyaltyPointsToRedeem" | "couponCode" | "customerId"
+  "discountPercent" | "tipAmount" | "serviceChargePercent" | "loyaltyPointsToRedeem" | "couponCode" | "customerId"
 >;
 
 export function useBillPreview(branchId: string | null, orderId: string, adj: BillAdjustments, enabled = true) {
@@ -276,6 +278,24 @@ export function useAddOrderItems(branchId: string | null) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
       queryClient.invalidateQueries({ queryKey: ["floors", branchId] });
+    },
+  });
+}
+
+
+export function useSplitOrder(branchId: string | null) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ orderId, dto }: { orderId: string; dto: SplitOrderDto }) =>
+      api.post<{ success: boolean; sourceOrder: CreatedOrder; targetOrder: CreatedOrder }>(
+        `/orders/${orderId}/split?branchId=${branchId}`,
+        dto,
+      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["floors", branchId] });
+      queryClient.invalidateQueries({ queryKey: ["kds"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
     },
   });
 }

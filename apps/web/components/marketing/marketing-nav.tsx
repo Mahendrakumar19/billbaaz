@@ -1,11 +1,10 @@
 "use client";
 
-import { Github, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Logo } from "@/components/layout/logo";
 import { Button } from "@/components/ui/button";
-import { downloadHref } from "@/lib/downloads";
 
 const links = [
   { href: "#features", label: "Features" },
@@ -20,10 +19,15 @@ export function MarketingNav() {
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2.5">
-          <Logo size={30} />
-          <span className="text-[15px] font-semibold tracking-tight text-foreground">
-            OrderRestro
-          </span>
+          <Logo size={32} />
+          <div className="flex flex-col">
+            <span className="text-[16px] font-bold tracking-tight text-foreground">
+              BillBaaz
+            </span>
+            <span className="text-[10px] font-medium text-muted-foreground -mt-1 tracking-wider uppercase">
+              Billing ka baazigar
+            </span>
+          </div>
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
@@ -39,18 +43,11 @@ export function MarketingNav() {
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
-          <a
-            href={downloadHref("github")}
-            className="inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <Github className="size-4" />
-            GitHub
-          </a>
           <Button variant="ghost" size="default" render={<Link href="/login" />}>
             Sign in
           </Button>
           <Button variant="default" size="default" render={<Link href="/signup" />}>
-            Get started free
+            Get started
           </Button>
         </div>
 
@@ -83,7 +80,7 @@ export function MarketingNav() {
                 Sign in
               </Button>
               <Button variant="default" render={<Link href="/signup" />}>
-                Get started free
+                Get started
               </Button>
             </div>
           </nav>

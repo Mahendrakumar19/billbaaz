@@ -21,6 +21,8 @@ import {
   cancelOrderSchema,
   deleteOrdersSchema,
   mergeOrdersSchema,
+  splitOrderSchema,
+  type SplitOrderDto,
   refundSchema,
   rejectOrderSchema,
   removeOrderItemSchema,
@@ -728,6 +730,25 @@ export class OrdersController {
   }
 
   @Auth('orders.edit')
+  
+  @Auth('orders.edit')
+  @Post(':id/split')
+  @UsePipes(new ZodValidationPipe(splitOrderSchema))
+  async split(
+    @CurrentUser() user: SessionUser,
+    @Query('branchId') branchId: string,
+    @Param('id') id: string,
+    @Body() body: unknown,
+  ) {
+    await this.branchAccess.assertAccess(user.restaurantId, branchId);
+    return this.ordersService.splitOrder(
+      branchId,
+      id,
+      user.id,
+      body as SplitOrderDto,
+    );
+  }
+
   @Post(':id/merge')
   @UsePipes(new ZodValidationPipe(mergeOrdersSchema))
   async merge(

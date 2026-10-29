@@ -24,7 +24,7 @@ interface BranchContextValue {
 
 const BranchContext = createContext<BranchContextValue | null>(null);
 
-const STORAGE_KEY = "nodedr_branch_id";
+const STORAGE_KEY = "billbaaz_branch_id";
 
 export function BranchProvider({ children }: { children: React.ReactNode }) {
   const { data: branches, isLoading, isPending, isError, error, refetch, isFetching } = useQuery({
@@ -37,7 +37,7 @@ export function BranchProvider({ children }: { children: React.ReactNode }) {
   // then a pure derivation from this plus the fetched branches, so no
   // effect/setState is needed to keep them in sync.
   const [manualBranchId, setManualBranchId] = useState<string | null>(() =>
-    typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null,
+    typeof window !== "undefined" ? (localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem("nodedr_branch_id")) : null,
   );
 
   const branchId = useMemo(() => {

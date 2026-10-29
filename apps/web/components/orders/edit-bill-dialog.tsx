@@ -1,6 +1,7 @@
 "use client";
 
-import { Minus, Trash2 } from "lucide-react";
+import { Minus, Trash2, Scissors } from "lucide-react";
+import { SplitBillDialog } from "@/components/orders/split-bill-dialog";
 import { useState } from "react";
 import { StatusNote, useNoteToast } from "@/components/ui/status-note";
 import { Button } from "@/components/ui/button";
@@ -51,6 +52,7 @@ export function EditBillDialog({
   const [error, setError] = useState<string | null>(null);
   const [notes, setNotes] = useState<string | null>(null);
   const [guestName, setGuestName] = useState<string | null>(null);
+  const [splitOpen, setSplitOpen] = useState(false);
 
   const fail = (err: unknown) =>
     setError(err instanceof ApiError ? err.message : "That change could not be saved.");

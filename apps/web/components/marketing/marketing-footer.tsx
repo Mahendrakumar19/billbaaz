@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Logo } from "@/components/layout/logo";
-import { downloadHref } from "@/lib/downloads";
 
 const columns = [
   {
@@ -14,8 +13,7 @@ const columns = [
   {
     title: "Resources",
     links: [
-      { href: downloadHref("github"), label: "GitHub" },
-      { href: "/docs/api", label: "API & MCP" },
+      { href: "/docs/api", label: "API & Integrations" },
       { href: "/docs/accessibility", label: "Accessibility statement" },
       { href: "/docs/compliance-india", label: "India compliance notes" },
     ],
@@ -36,12 +34,15 @@ export function MarketingFooter() {
         <div className="grid gap-10 sm:grid-cols-[1.5fr_repeat(3,1fr)]">
           <div>
             <Link href="/" className="flex items-center gap-2.5">
-              <Logo size={28} />
-              <span className="text-sm font-semibold text-foreground">OrderRestro</span>
+              <Logo size={32} />
+              <div className="flex flex-col">
+                <span className="text-base font-bold text-foreground">BillBaaz</span>
+                <span className="text-[10px] text-muted-foreground font-medium">Billing ka baazigar</span>
+              </div>
             </Link>
             <p className="mt-3 max-w-xs text-sm text-muted-foreground">
-              Offline-first restaurant management, self-hosted on your own
-              server. Built by Nodedr Infotech Private Limited.
+              Offline-first restaurant management & POS, self-hosted on your own
+              server. Built for high performance, zero downtime, and complete data ownership.
             </p>
           </div>
 
@@ -68,9 +69,9 @@ export function MarketingFooter() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border/60 pt-6 sm:flex-row">
           <p className="text-xs text-muted-foreground">
-            &copy; {new Date().getFullYear()} Nodedr Infotech Private Limited. Licensed AGPL-3.0.
+            &copy; {new Date().getFullYear()} BillBaaz. All rights reserved.
           </p>
-          <p className="text-xs text-muted-foreground">Made in India.</p>
+          <p className="text-xs text-muted-foreground">Made with pride in India.</p>
         </div>
       </div>
     </footer>

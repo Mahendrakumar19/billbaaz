@@ -14,17 +14,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Nodedr OrderRestro",
-  description: "Offline-first restaurant management system",
+  title: "BillBaaz — Billing ka baazigar",
+  description: "BillBaaz — Billing ka baazigar. Modern, fast, and offline-first restaurant management POS.",
   manifest: "/manifest.json",
   icons: {
-    icon: [{ url: "/icons/favicon-32.png", sizes: "32x32", type: "image/png" }],
+    icon: [{ url: "/icons/favicon-32.png", sizes: "32x32", type: "image/png" }, { url: "/logo.png", sizes: "512x512", type: "image/png" }],
     apple: [{ url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" }],
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#9f1239",
+  themeColor: "#FF7A00",
   // Lets the bottom nav / sheets sit inside the notch + home-indicator safe areas.
   viewportFit: "cover",
 };

@@ -10,6 +10,8 @@ import { IntegrationApiKeysService } from './integration-api-keys.service';
 import { IntegrationsController } from './integrations.controller';
 import { IntegrationsService } from './integrations.service';
 import { StaffApiKeysController } from './staff-api-keys.controller';
+import { HardwareBridgeController } from './hardware-bridge.controller';
+import { AggregatorsController } from './aggregators.controller';
 import { StaffApiKeysService } from './staff-api-keys.service';
 
 @Module({

@@ -1,13 +1,12 @@
 "use client";
 
-import { ArrowRight, Github } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { downloadHref } from "@/lib/downloads";
 import { PosMockup } from "@/components/marketing/pos-mockup";
 
-const words = ["Restaurant", "software", "you", "actually", "own."];
+const words = ["Billing", "ka", "asli", "baazigar."];
 
 export function Hero() {
   return (
@@ -26,17 +25,17 @@ export function Hero() {
           className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/60 bg-muted/50 px-3 py-1 text-xs font-medium text-muted-foreground"
         >
           <span className="size-1.5 rounded-full bg-success" />
-          Open source · AGPL-3.0 · self-hosted
+          ⚡ BillBaaz · Billing ka baazigar · Offline-first & Zero Subscription
         </motion.div>
 
-        <h1 className="flex flex-wrap justify-center gap-x-3 text-4xl font-semibold tracking-tight text-foreground sm:text-6xl">
+        <h1 className="flex flex-wrap justify-center gap-x-3 text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl">
           {words.map((word, i) => (
             <motion.span
               key={word}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
-              className={word === "own." ? "text-primary" : undefined}
+              className={word === "baazigar." ? "text-primary" : undefined}
             >
               {word}
             </motion.span>
@@ -49,10 +48,8 @@ export function Hero() {
           transition={{ duration: 0.4, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
           className="mt-6 max-w-2xl text-balance text-lg text-muted-foreground sm:text-xl"
         >
-          POS, kitchen display, tables, reservations, inventory, and CRM — one
-          self-hosted stack that runs on your own LAN. No subscription, no
-          forced cloud dependency, no vendor lock-in. Your orders, your
-          customers&rsquo; data, your server.
+          High-speed POS, live Kitchen Display (KDS), table management, dynamic UPI QR
+          payments, inventory & recipe costing — one unified system that runs directly on your own local server.
         </motion.p>
 
         <motion.div
@@ -62,17 +59,16 @@ export function Hero() {
           className="mt-9 flex flex-col items-center gap-3 sm:flex-row"
         >
           <Button size="lg" className="h-11 px-6 text-[15px]" render={<Link href="/signup" />}>
-            Get started free
+            Get started
             <ArrowRight className="size-4" data-icon="inline-end" />
           </Button>
           <Button
             variant="outline"
             size="lg"
             className="h-11 px-6 text-[15px]"
-            render={<a href={downloadHref("github")} />}
+            render={<Link href="/login" />}
           >
-            <Github className="size-4" data-icon="inline-start" />
-            View on GitHub
+            Sign in to POS
           </Button>
         </motion.div>
       </div>

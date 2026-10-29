@@ -30,7 +30,7 @@ import { api, ApiError } from "@/lib/api";
 import { discountSummary, parseMoney, planPayment } from "@/lib/bill";
 import { formatCurrency } from "@/lib/format";
 import { publishDisplay } from "@/lib/customer-display";
-import { playPaymentReceived } from "@/lib/celebrate";
+import { playPaymentReceived, playHindiSoundboxVoice } from "@/lib/celebrate";
 import { buildUpiUri } from "@/lib/upi";
 import { QRCodeSVG } from "qrcode.react";
 import { openKotPrint, openReceiptPrint } from "@/lib/print";
@@ -84,12 +84,20 @@ export function CheckoutPanel({
   const [amountText, setAmountText] = useState("");
   const [discountPercent, setDiscountPercent] = useState("0");
   const [tipAmount, setTipAmount] = useState("0");
+  const [serviceChargePercent, setServiceChargePercent] = useState<number>(0);
   const [pointsToRedeem, setPointsToRedeem] = useState("0");
   const [giftCardCode, setGiftCardCode] = useState("");
   const [giftCardBalance, setGiftCardBalance] = useState<number | null>(null);
   const [checkingGiftCard, setCheckingGiftCard] = useState(false);
   const [splitCount, setSplitCount] = useState("1");
   const [customer, setCustomer] = useState<Customer | null>(initialCustomer);
+  const [isSplitTender, setIsSplitTender] = useState(false);
+  const [splitTenders, setSplitTenders] = useState<{ CASH: string; CARD: string; UPI: string; OTHER: string }>({
+    CASH: "",
+    CARD: "",
+    UPI: "",
+    OTHER: "",
+  });
   const [couponInput, setCouponInput] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState("");
   const checkout = useCheckoutOrder(branchId);
@@ -137,6 +145,7 @@ export function CheckoutPanel({
     () => ({
       discountPercent: Number(discountPercent) || 0,
       tipAmount: Number(tipAmount) || 0,
+      serviceChargePercent,
       loyaltyPointsToRedeem: Math.max(0, Math.floor(Number(pointsToRedeem) || 0)),
       couponCode: appliedCoupon || undefined,
     }),
@@ -197,11 +206,13 @@ export function CheckoutPanel({
   };
 
   // What the QR asks the guest to pay: the amount being recorded now.
-  const upiAmount = plan.valid ? plan.applied : remainingDue;
+  const upiAmount = isSplitTender
+    ? Number(splitTenders.UPI) || 0
+    : plan.valid ? plan.applied : remainingDue;
   const upiVpa = settings?.restaurant.upiVpa;
   const upiName = settings?.restaurant.upiPayeeName || settings?.restaurant.name;
   const upiUri =
-    method !== "UPI" || !upiVpa || !(upiAmount > 0)
+    ((!isSplitTender && method !== "UPI") || (isSplitTender && !(Number(splitTenders.UPI) > 0))) || !upiVpa || !(upiAmount > 0)
       ? null
       : buildUpiUri({
           vpa: upiVpa,
@@ -260,6 +271,7 @@ export function CheckoutPanel({
             setCompleted(result);
             publishDisplay({ kind: "paid", total: Number(result.totalAmount), method });
             playPaymentReceived(formatCurrency(result.totalAmount));
+            playHindiSoundboxVoice(Number(result.totalAmount), "hi-IN");
             toast.success("Payment recorded");
           } else {
             toast.success(
@@ -622,7 +634,7 @@ export function CheckoutPanel({
             </div>
           )}
 
-          {method === "UPI" && remainingDue > 0 && (
+          {((!isSplitTender && method === "UPI") || (isSplitTender && Number(splitTenders.UPI) > 0)) && remainingDue > 0 && (
             <div className="flex flex-col items-center gap-2 rounded-xl border border-border bg-white p-4">
               {upiUri ? (
                 <>
@@ -695,7 +707,7 @@ export function CheckoutPanel({
 
         <Button
           className="h-12 text-base"
-          disabled={checkout.isPending || !bill || repricing || !plan.valid}
+          disabled={checkout.isPending || !bill || repricing || (isSplitTender ? splitTotal <= 0 : !plan.valid)}
           onClick={handleCheckout}
         >
           {checkout.isPending

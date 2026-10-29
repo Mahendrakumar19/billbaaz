@@ -1,17 +1,23 @@
 {
-  "name": "Nodedr OrderRestro",
-  "short_name": "OrderRestro",
-  "description": "Offline-first restaurant management system — POS, tables, kitchen display, menu, inventory.",
+  "name": "BillBaaz",
+  "short_name": "BillBaaz",
+  "description": "BillBaaz — Billing ka baazigar. Offline-first restaurant management system — POS, tables, kitchen display, menu, inventory.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "display_override": ["window-controls-overlay", "standalone"],
   "orientation": "any",
   "background_color": "#0f0f11",
-  "theme_color": "#9f1239",
+  "theme_color": "#FF7A00",
   "lang": "en",
   "categories": ["business", "food", "productivity"],
   "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "/icons/icon-192.png",
       "sizes": "192x192",

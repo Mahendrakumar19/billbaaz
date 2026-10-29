@@ -19,8 +19,8 @@
     ProcessorArchitecture="x64" />
 
   <Properties>
-    <DisplayName>Nodedr OrderRestro</DisplayName>
-    <PublisherDisplayName>NODEDR INFOTECH LIMITED</PublisherDisplayName>
+    <DisplayName>BillBaaz</DisplayName>
+    <PublisherDisplayName>BillBaaz</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -39,8 +39,8 @@
   <Applications>
     <Application Id="OrderRestro" Executable="OrderRestro.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements
-        DisplayName="Nodedr OrderRestro"
-        Description="Offline-first restaurant POS, tables, kitchen display, and menu management."
+        DisplayName="BillBaaz"
+        Description="BillBaaz — Billing ka baazigar. Modern restaurant POS & management system."
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png">

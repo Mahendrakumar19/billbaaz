@@ -145,6 +145,7 @@ const billAdjustmentFields = {
   discountPercent: z.coerce.number().min(0).max(100).optional(),
   discountFlat: z.coerce.number().min(0).optional(),
   tipAmount: z.coerce.number().min(0).optional(),
+  serviceChargePercent: z.coerce.number().min(0).max(30).optional(),
   loyaltyPointsToRedeem: z.coerce.number().int().min(0).optional(),
   couponCode: z.string().trim().min(3).max(24).optional(),
 };
@@ -211,6 +212,20 @@ export const mergeOrdersSchema = z.object({
   sourceOrderId: z.string(),
 });
 export type MergeOrdersDto = z.infer<typeof mergeOrdersSchema>;
+
+export const splitOrderSchema = z.object({
+  items: z
+    .array(
+      z.object({
+        orderItemId: z.string().min(1),
+        quantity: z.number().int().min(1),
+      }),
+    )
+    .min(1),
+  targetTableId: z.string().optional(),
+  targetGuestName: z.string().trim().max(80).optional(),
+});
+export type SplitOrderDto = z.infer<typeof splitOrderSchema>;
 
 // Edit an open bill: move it to another table and/or fix header details.
 export const updateOrderSchema = z

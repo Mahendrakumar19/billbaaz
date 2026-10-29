@@ -51,9 +51,9 @@ export default function SignupPage() {
             <Logo size={44} />
           </Link>
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-            Nodedr OrderRestro
+            BillBaaz
           </h1>
-          <p className="text-sm text-muted-foreground">Set up your restaurant</p>
+          <p className="text-sm text-muted-foreground">Billing ka baazigar · Set up your restaurant</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
@@ -112,7 +112,6 @@ export default function SignupPage() {
             <Label htmlFor="password">Password</Label>
             <PasswordInput
               id="password"
-              
               autoComplete="new-password"
               placeholder="At least 8 characters"
               {...field("password")}

@@ -89,3 +89,24 @@ export function playPaymentReceived(amountText?: string) {
     // Speech is a nicety only.
   }
 }
+
+
+/**
+ * Speaks Hindi or English Soundbox Voice Announcement directly from browser speech synthesis
+ * E.g. "BillBaaz par do sau pachaas rupaye prapt hue" / "Payment of ₹250 received on BillBaaz"
+ */
+export function playHindiSoundboxVoice(amount: number, language: "hi-IN" | "en-IN" = "hi-IN") {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+  try {
+    const text =
+      language === "hi-IN"
+        ? `BillBaaz par ${amount} rupaye prapt hue.`
+        : `Payment of ${amount} rupees received on BillBaaz.`;
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = language;
+    u.rate = 0.95;
+    window.speechSynthesis.speak(u);
+  } catch {
+    // Graceful fallback
+  }
+}

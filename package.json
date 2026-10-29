@@ -1,19 +1,12 @@
 {
-  "name": "nodedr-orderrestro",
+  "name": "billbaaz",
   "private": true,
-  "version": "0.1.0",
-  "description": "Nodedr OrderRestro — offline-first Restaurant Management System",
-  "author": "Raktim Ranjit <mail@raktimranjit.com> (https://github.com/Raktim94)",
+  "version": "1.0.0",
+  "description": "BillBaaz — Billing ka baazigar. Modern offline-first restaurant management POS",
+  "author": "BillBaaz",
   "license": "AGPL-3.0-only",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Raktim94/nodedr-restaurant-pos.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Raktim94/nodedr-restaurant-pos/issues"
-  },
-  "homepage": "https://orderrestro.nodedr.com/",
   "keywords": [
+    "billbaaz",
     "restaurant-management",
     "restaurant-pos",
     "point-of-sale",
@@ -25,7 +18,6 @@
     "gst-billing",
     "restaurant-payroll",
     "qr-ordering",
-    "casaos",
     "nestjs",
     "nextjs"
   ],
