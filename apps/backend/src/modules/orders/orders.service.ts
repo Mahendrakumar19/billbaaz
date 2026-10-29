@@ -19,6 +19,7 @@ import {
   type SessionUser,
   type UpdateOrderDto,
   type UpdateOrderItemDto,
+  type SplitOrderDto,
 } from '@nodedr-restaurant/types';
 import { AuditService } from '../../audit/audit.service';
 import { NotificationsService } from '../../notifications/notifications.service';
@@ -1262,6 +1263,8 @@ export class OrdersService {
         loyaltyDiscountAmount: Number(order.loyaltyDiscountAmount),
         tipAmount: Number(order.tipAmount),
         deliveryFee: Number(order.deliveryFee),
+        serviceChargePercent: 0,
+        serviceChargeAmount: 0,
         totalDue: Number(order.totalAmount),
       };
       return {

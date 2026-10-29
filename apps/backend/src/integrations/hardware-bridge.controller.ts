@@ -135,17 +135,7 @@ export class HardwareBridgeController {
     // Broadcast to branch or connected staff
     // soundbox is emitted to branch room
     // Using default branch or logging
-    this.logger.log('Broadcast voice event');
-    // dummy replacement for emitAll:
-    const dummy = {
-      provider: data.provider,
-      amount: data.amount,
-      currency: data.currency,
-      language: data.language,
-      orderNumber: data.orderNumber,
-      speechText,
-      timestamp: new Date().toISOString(),
-    });
+    this.logger.log(`Broadcast voice event: ${speechText}`);
 
     return {
       success: true,

@@ -65,6 +65,10 @@ export function computeBill(input: BillInput): Bill {
             totals.subtotal,
         )
       : 0;
+  const serviceChargePercent = Math.max(0, input.serviceChargePercent ?? 0);
+  const netSubtotal = Math.max(0, totals.subtotal - totals.discountAmount);
+  const serviceChargeAmount = serviceChargePercent > 0 ? round2((netSubtotal * serviceChargePercent) / 100) : 0;
+
   return {
     subtotal: totals.subtotal,
     discountAmount: totals.discountAmount,
@@ -73,8 +77,10 @@ export function computeBill(input: BillInput): Bill {
     loyaltyDiscountAmount,
     tipAmount,
     deliveryFee,
+    serviceChargePercent,
+    serviceChargeAmount,
     totalDue: round2(
-      totals.totalAmount - loyaltyDiscountAmount + tipAmount + deliveryFee,
+      totals.totalAmount - loyaltyDiscountAmount + tipAmount + deliveryFee + serviceChargeAmount,
     ),
   };
 }
