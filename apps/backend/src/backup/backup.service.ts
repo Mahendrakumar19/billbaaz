@@ -23,7 +23,7 @@ import type {
   RestoreBackupDto,
   SessionUser,
   SetBackupConfigDto,
-} from '@nodedr-restaurant/types';
+} from '@billbaaz/types';
 import { AuditService } from '../audit/audit.service';
 import type { NotifyPayload } from '../notifications/notifications.service';
 import { NotificationsService } from '../notifications/notifications.service';
@@ -52,7 +52,7 @@ function mask(value: string): string {
  * Full-instance backup (Postgres + the uploads volume) to any S3-compatible
  * bucket, ported from zulivio's real, working `backup/` module
  * (~/zulivio/apps/backend/src/backup/) and adapted to this repo's
- * conventions: Zod schemas from @nodedr-restaurant/types instead of
+ * conventions: Zod schemas from @billbaaz/types instead of
  * class-validator DTOs, `AuditService`/`NotificationsService` instead of
  * zulivio's audit/notification equivalents, and a permission-key gate
  * (`backup.manage`, checked by the controller's `@Auth()`) instead of

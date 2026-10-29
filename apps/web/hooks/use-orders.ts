@@ -8,7 +8,7 @@ import type {
   RefundDto,
   UpdateOrderDto,
   SplitOrderDto,
-} from "@nodedr-restaurant/types";
+} from "@billbaaz/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Customer } from "@/hooks/use-customers";
 import { api } from "@/lib/api";

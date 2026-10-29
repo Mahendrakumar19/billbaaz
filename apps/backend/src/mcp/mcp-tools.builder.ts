@@ -9,7 +9,7 @@ import {
   permissionSatisfied,
   type ReservationStatusDto,
   type SessionUser,
-} from '@nodedr-restaurant/types';
+} from '@billbaaz/types';
 import { PrismaService } from '../prisma/prisma.service';
 import { BranchAccessService } from '../common/services/branch-access.service';
 import { OrdersService } from '../modules/orders/orders.service';

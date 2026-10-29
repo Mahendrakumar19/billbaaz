@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema, type RegisterDto } from "@nodedr-restaurant/types";
+import { registerSchema, type RegisterDto } from "@billbaaz/types";
 import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

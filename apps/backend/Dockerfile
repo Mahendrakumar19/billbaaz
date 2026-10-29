@@ -22,15 +22,15 @@ COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 COPY apps/backend/package.json apps/backend/package.json
 COPY apps/web/package.json apps/web/package.json
 COPY packages/types/package.json packages/types/package.json
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --no-frozen-lockfile
 
 # --- builder: compile types package, generate Prisma client, build Nest ---
 FROM deps AS builder
 COPY packages/types packages/types
 COPY apps/backend apps/backend
-RUN pnpm --filter @nodedr-restaurant/types build
-RUN pnpm --filter @nodedr-restaurant/backend exec prisma generate
-RUN pnpm --filter @nodedr-restaurant/backend build
+RUN pnpm --filter @billbaaz/types build
+RUN pnpm --filter @billbaaz/backend exec prisma generate
+RUN pnpm --filter @billbaaz/backend build
 
 # Docker CLI (optional in-container "update & restart" against mounted
 # docker.sock — see src/system/update.service.ts). Pulled from the official

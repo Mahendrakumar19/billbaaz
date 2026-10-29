@@ -1,6 +1,6 @@
 "use client";
 
-import type { SessionUser } from "@nodedr-restaurant/types";
+import type { SessionUser } from "@billbaaz/types";
 import { Menu } from "lucide-react";
 import { useState } from "react";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
@@ -59,8 +59,8 @@ export function AppShell({
 
   return (
     <div className="flex min-h-screen bg-background">
-      {/* Desktop sidebar */}
-      <aside className="hidden w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar lg:flex">
+      {/* Desktop sidebar - fixed viewport height */}
+      <aside className="hidden w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar lg:sticky lg:top-0 lg:h-screen lg:flex">
         <div className="flex h-16 items-center gap-2 px-5">
           <RestaurantBrand />
         </div>
@@ -91,7 +91,7 @@ export function AppShell({
       </Sheet>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-16 shrink-0 items-center justify-between border-b border-border bg-background/80 px-4 backdrop-blur sm:px-6">
+        <header className="sticky top-0 z-40 flex h-16 shrink-0 items-center justify-between border-b border-border bg-background/95 px-4 backdrop-blur sm:px-6">
           <button
             type="button"
             onClick={() => setMobileOpen(true)}

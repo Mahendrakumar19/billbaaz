@@ -1,6 +1,6 @@
 "use client";
 
-import type { SetComboComponentsDto } from "@nodedr-restaurant/types";
+import type { SetComboComponentsDto } from "@billbaaz/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 

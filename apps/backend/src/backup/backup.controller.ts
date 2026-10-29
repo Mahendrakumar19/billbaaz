@@ -16,7 +16,7 @@ import {
   restoreBackupSchema,
   setBackupConfigSchema,
   type SessionUser,
-} from '@nodedr-restaurant/types';
+} from '@billbaaz/types';
 import { Auth } from '../common/decorators/auth.decorator';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';

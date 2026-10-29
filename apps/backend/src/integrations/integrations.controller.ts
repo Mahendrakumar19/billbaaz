@@ -13,7 +13,7 @@ import { Throttle } from '@nestjs/throttler';
 import {
   createIntegrationOrderSchema,
   createIntegrationReservationSchema,
-} from '@nodedr-restaurant/types';
+} from '@billbaaz/types';
 import { CurrentIntegrationKey } from '../common/decorators/current-integration-key.decorator';
 import { RequireScope } from '../common/decorators/require-scope.decorator';
 import { IntegrationApiKeyGuard } from '../common/guards/integration-api-key.guard';

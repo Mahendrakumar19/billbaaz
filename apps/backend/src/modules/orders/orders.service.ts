@@ -20,7 +20,7 @@ import {
   type UpdateOrderDto,
   type UpdateOrderItemDto,
   type SplitOrderDto,
-} from '@nodedr-restaurant/types';
+} from '@billbaaz/types';
 import { AuditService } from '../../audit/audit.service';
 import { NotificationsService } from '../../notifications/notifications.service';
 import { GiftCardsService } from '../gift-cards/gift-cards.service';
@@ -43,7 +43,7 @@ import {
   settlePayments,
   type Bill,
 } from './settlement';
-import type { TaxMode } from '@nodedr-restaurant/types';
+import type { TaxMode } from '@billbaaz/types';
 import { VerifactuService } from '../verifactu/verifactu.service';
 
 const KOT_FORWARD_STATUSES = [

@@ -16,7 +16,7 @@ import {
   twoFactorCodeSchema,
   twoFactorDisableSchema,
   type SessionUser,
-} from '@nodedr-restaurant/types';
+} from '@billbaaz/types';
 import { Throttle } from '@nestjs/throttler';
 import type { Response } from 'express';
 import { CurrentUser } from '../common/decorators/current-user.decorator';

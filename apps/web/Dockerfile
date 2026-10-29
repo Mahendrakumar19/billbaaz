@@ -17,7 +17,7 @@ COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 COPY apps/backend/package.json apps/backend/package.json
 COPY apps/web/package.json apps/web/package.json
 COPY packages/types/package.json packages/types/package.json
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --no-frozen-lockfile
 
 # --- builder ---
 # BACKEND_URL is a build ARG, not a runtime env — Next.js bakes rewrite
@@ -29,8 +29,8 @@ ARG BACKEND_URL=http://backend:4000
 ENV BACKEND_URL=${BACKEND_URL}
 COPY packages/types packages/types
 COPY apps/web apps/web
-RUN pnpm --filter @nodedr-restaurant/types build
-RUN pnpm --filter web build
+RUN pnpm --filter @billbaaz/types build
+RUN pnpm --filter @billbaaz/web build
 
 # --- runtime ---
 FROM node:22-alpine AS runtime
