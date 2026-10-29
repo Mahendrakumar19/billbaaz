@@ -53,16 +53,39 @@ export function MarketingFooter() {
                 {col.title}
               </h3>
               <ul className="mt-3 flex flex-col gap-2.5">
-                {col.links.map((l) => (
-                  <li key={l.label}>
-                    <a
-                      href={l.href}
-                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                    >
-                      {l.label}
-                    </a>
-                  </li>
-                ))}
+                {col.links.map((l) => {
+                  const isExternal = l.href.startsWith("http");
+                  const isAnchor = l.href.startsWith("#");
+
+                  return (
+                    <li key={l.label}>
+                      {isExternal ? (
+                        <a
+                          href={l.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                        >
+                          {l.label}
+                        </a>
+                      ) : isAnchor ? (
+                        <a
+                          href={l.href}
+                          className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                        >
+                          {l.label}
+                        </a>
+                      ) : (
+                        <Link
+                          href={l.href}
+                          className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                        >
+                          {l.label}
+                        </Link>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}
@@ -72,17 +95,28 @@ export function MarketingFooter() {
           <p className="text-xs text-muted-foreground">
             &copy; {new Date().getFullYear()} BillBaaz. All rights reserved.
           </p>
-          <p className="text-xs text-muted-foreground">
-            Made with pride in India by{" "}
+          <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2.5 text-xs text-muted-foreground">
+            <p>
+              Made with pride in India by{" "}
+              <a
+                href="https://nighwantech.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-foreground hover:text-primary hover:underline transition-colors"
+              >
+                Nighwan Technology Pvt. Ltd.
+              </a>
+            </p>
+            <span className="hidden sm:inline text-muted-foreground/40">•</span>
             <a
               href="https://nighwantech.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-medium text-foreground hover:text-primary hover:underline transition-colors"
+              className="font-mono text-[11px] text-muted-foreground hover:text-primary hover:underline transition-colors"
             >
-              Nighwan Technology Pvt. Ltd. (nighwantech.com)
+              nighwantech.com
             </a>
-          </p>
+          </div>
         </div>
       </div>
     </footer>
