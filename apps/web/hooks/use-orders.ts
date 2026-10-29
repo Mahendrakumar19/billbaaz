@@ -7,6 +7,7 @@ import type {
   KotStatusDto,
   RefundDto,
   UpdateOrderDto,
+  SplitOrderDto,
 } from "@nodedr-restaurant/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Customer } from "@/hooks/use-customers";
