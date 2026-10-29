@@ -82,6 +82,9 @@ export function CheckoutPanel({
     : orderSnapshot;
   const [method, setMethod] = useState<PaymentMethodDto>("CASH");
   const [amountText, setAmountText] = useState("");
+  const [waPhone, setWaPhone] = useState(order.deliveryPhone || "");
+  const [waSending, setWaSending] = useState(false);
+  const [waSent, setWaSent] = useState(false);
   const [discountPercent, setDiscountPercent] = useState("0");
   const [tipAmount, setTipAmount] = useState("0");
   const [serviceChargePercent, setServiceChargePercent] = useState<number>(0);
@@ -325,7 +328,61 @@ export function CheckoutPanel({
             {completed.loyaltyPointsRedeemed} points redeemed
           </p>
         )}
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+        {/* WhatsApp Digital Bill Box */}
+        <div className="w-full max-w-sm rounded-xl border border-success/30 bg-success/5 p-3 flex flex-col gap-2 my-2 text-left">
+          <div className="flex items-center justify-between text-xs font-semibold">
+            <span className="flex items-center gap-1.5 text-success">
+              <span className="size-2 rounded-full bg-success animate-pulse" />
+              WhatsApp Digital Receipt
+            </span>
+            {waSent && <span className="text-success text-[11px] font-bold">✓ Sent on WhatsApp</span>}
+          </div>
+          <div className="flex gap-2">
+            <Input
+              type="tel"
+              placeholder="Customer 10-digit mobile"
+              value={waPhone}
+              onChange={(e) => setWaPhone(e.target.value)}
+              className="h-9 text-xs"
+              maxLength={15}
+            />
+            <Button
+              size="sm"
+              className="h-9 bg-[#25D366] hover:bg-[#20ba59] text-white text-xs font-semibold shrink-0 rounded-lg"
+              disabled={waSending}
+              onClick={async () => {
+                if (!waPhone) {
+                  toast.error("Please enter mobile number");
+                  return;
+                }
+                setWaSending(true);
+                try {
+                  await api.post("/integrations/whatsapp/send-invoice", {
+                    branchId,
+                    toPhone: waPhone,
+                    orderNumber: completed.orderNumber,
+                    totalAmount: Number(completed.totalAmount),
+                    items: order.items?.map((it) => ({
+                      name: it.nameSnapshot,
+                      quantity: it.quantity,
+                      price: Number(it.unitPriceSnapshot),
+                    })) || [],
+                  });
+                  setWaSent(true);
+                  toast.success(`Digital receipt sent on WhatsApp to ${waPhone}!`);
+                } catch {
+                  toast.error("Could not send WhatsApp bill");
+                } finally {
+                  setWaSending(false);
+                }
+              }}
+            >
+              {waSending ? "Sending…" : waSent ? "Resend" : "Send WhatsApp"}
+            </Button>
+          </div>
+        </div>
+
+        <div className="mt-2 flex flex-wrap items-center justify-center gap-2">
           <Button
             variant="outline"
             className="h-11"

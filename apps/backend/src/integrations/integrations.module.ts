@@ -20,6 +20,8 @@ import { StaffApiKeysService } from './staff-api-keys.service';
     IntegrationsController,
     IntegrationApiKeysController,
     StaffApiKeysController,
+    HardwareBridgeController,
+    AggregatorsController,
   ],
   providers: [
     IntegrationsService,

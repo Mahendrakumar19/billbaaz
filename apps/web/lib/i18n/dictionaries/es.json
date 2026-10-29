@@ -1,6 +1,7 @@
 {
   "nav.dashboard": "Panel",
   "nav.pos": "Punto de venta",
+  "nav.aggregators": "Pedidos Online (Zomato / Swiggy)",
   "nav.tables": "Mesas",
   "nav.orders": "Pedidos",
   "nav.reservations": "Reservas",

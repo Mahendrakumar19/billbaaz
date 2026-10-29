@@ -1,6 +1,7 @@
 {
   "nav.dashboard": "Dashboard",
   "nav.pos": "Point of Sale",
+  "nav.aggregators": "Online Orders (Zomato / Swiggy)",
   "nav.tables": "Tables",
   "nav.orders": "Orders",
   "nav.reservations": "Reservations",

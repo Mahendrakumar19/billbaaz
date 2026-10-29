@@ -27,6 +27,7 @@ import {
   useCategories,
   useDeleteCategory,
   useDeleteMenuItem,
+  useUpdateMenuItem,
   useMenuItems,
   type MenuCategory,
   type MenuItem,
@@ -45,6 +46,7 @@ export default function MenuPage() {
   const { data: items, isLoading: itemsLoading } = useMenuItems(branchId, selectedCategoryId);
   const { data: allItems } = useMenuItems(branchId);
   const deleteItem = useDeleteMenuItem(branchId);
+  const updateItem = useUpdateMenuItem(branchId);
   const deleteCategory = useDeleteCategory(branchId);
   const [comboItem, setComboItem] = useState<MenuItem | null>(null);
   const [editingCategory, setEditingCategory] = useState<MenuCategory | null>(null);
@@ -284,7 +286,14 @@ export default function MenuPage() {
                           <div className="h-9 w-9 shrink-0 rounded-md bg-secondary" />
                         )}
                         {item.isVeg && <Leaf className="h-3.5 w-3.5 shrink-0 text-success" />}
-                        {item.name}
+                        <span className={!item.isActive ? "line-through text-muted-foreground opacity-60" : ""}>
+                          {item.name}
+                        </span>
+                        {!item.isActive && (
+                          <Badge variant="destructive" className="ml-1.5 text-[10px] px-1.5 py-0 font-bold uppercase shrink-0">
+                            86 Out
+                          </Badge>
+                        )}
                       </div>
                     </TableCell>
                     <TableCell className="text-muted-foreground">{item.category.name}</TableCell>
@@ -306,6 +315,32 @@ export default function MenuPage() {
                     <TableCell>
                       {canManage && (
 <div className="flex items-center justify-end gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className={cn(
+                            "h-8 px-2 text-xs font-semibold rounded-lg",
+                            item.isActive
+                              ? "text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                              : "bg-destructive/15 text-destructive hover:bg-success/15 hover:text-success",
+                          )}
+                          title={item.isActive ? "Mark Out of Stock (Item 86)" : "Mark In Stock"}
+                          onClick={() => {
+                            updateItem.mutate(
+                              { id: item.id, dto: { isActive: !item.isActive } },
+                              {
+                                onSuccess: () =>
+                                  toast.success(
+                                    item.isActive
+                                      ? `${item.name} marked OUT OF STOCK (Item 86)`
+                                      : `${item.name} marked IN STOCK`,
+                                  ),
+                              },
+                            );
+                          }}
+                        >
+                          {item.isActive ? "86 Out" : "In Stock"}
+                        </Button>
                         <Button
                           variant="ghost"
                           size="icon"
