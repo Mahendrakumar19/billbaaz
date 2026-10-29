@@ -45,35 +45,64 @@ export function PosAutoLockModal() {
 
   if (!isLocked || !user) return null;
 
-  const handleDigit = (digit: string) => {
-    if (pin.length < 4) {
-      const next = pin + digit;
-      setPin(next);
-      setError(null);
-      if (next.length === 4) {
-        verifyPin(next);
+  const verifyPin = useCallback(
+    (candidate: string) => {
+      // PIN authentication check: accepts standard demo pin 1234, 0000, or user ID suffix
+      const validPins = ["1234", "0000", user.id.slice(-4)];
+      if (validPins.includes(candidate)) {
+        setIsLocked(false);
+        setPin("");
+        setError(null);
+        lastActiveRef.current = Date.now();
+      } else {
+        setError("Incorrect 4-digit PIN. Please try again.");
+        setPin("");
       }
-    }
-  };
+    },
+    [user],
+  );
 
-  const handleBackspace = () => {
+  const handleDigit = useCallback(
+    (digit: string) => {
+      setPin((prev) => {
+        if (prev.length >= 4) return prev;
+        const next = prev + digit;
+        setError(null);
+        if (next.length === 4) {
+          verifyPin(next);
+        }
+        return next;
+      });
+    },
+    [verifyPin],
+  );
+
+  const handleBackspace = useCallback(() => {
     setPin((prev) => prev.slice(0, -1));
     setError(null);
-  };
+  }, []);
 
-  const verifyPin = (candidate: string) => {
-    // PIN authentication check: accepts standard demo pin 1234, 0000, or user ID suffix
-    const validPins = ["1234", "0000", user.id.slice(-4)];
-    if (validPins.includes(candidate)) {
-      setIsLocked(false);
-      setPin("");
-      setError(null);
-      lastActiveRef.current = Date.now();
-    } else {
-      setError("Incorrect 4-digit PIN. Please try again.");
-      setPin("");
-    }
-  };
+  // Physical keyboard and numpad support
+  useEffect(() => {
+    if (!isLocked) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (/^[0-9]$/.test(e.key)) {
+        e.preventDefault();
+        handleDigit(e.key);
+      } else if (e.key === "Backspace") {
+        e.preventDefault();
+        handleBackspace();
+      } else if (e.key === "Escape" || e.key === "Delete" || e.key.toLowerCase() === "c") {
+        e.preventDefault();
+        setPin("");
+        setError(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isLocked, handleDigit, handleBackspace]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-md p-4">
@@ -148,7 +177,7 @@ export function PosAutoLockModal() {
         </div>
 
         <p className="text-[11px] text-muted-foreground mt-4">
-          Quick unlock PIN: <code className="font-semibold text-primary">1234</code>
+          Type on keyboard or use keypad · Quick unlock: <code className="font-semibold text-primary">1234</code>
         </p>
       </div>
     </div>
