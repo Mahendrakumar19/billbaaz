@@ -98,6 +98,13 @@ export function CheckoutPanel({
     UPI: "",
     OTHER: "",
   });
+
+  const splitTotal = round2(
+    (Number(splitTenders.CASH) || 0) +
+    (Number(splitTenders.CARD) || 0) +
+    (Number(splitTenders.UPI) || 0) +
+    (Number(splitTenders.OTHER) || 0)
+  );
   const [couponInput, setCouponInput] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState("");
   const checkout = useCheckoutOrder(branchId);

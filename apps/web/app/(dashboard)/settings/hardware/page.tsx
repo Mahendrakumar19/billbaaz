@@ -24,7 +24,7 @@ import { StatusNote, useNoteToast } from "@/components/ui/status-note";
 import { SettingsTabs } from "@/components/settings/settings-tabs";
 
 export default function IntegrationsHardwarePage() {
-  const { currentBranchId } = useBranch();
+  const { branchId } = useBranch();
   const { note, clear: clearNote, toast } = useNoteToast();
 
   const [soundboxTesting, setSoundboxTesting] = useState(false);
@@ -53,7 +53,7 @@ export default function IntegrationsHardwarePage() {
   };
 
   const triggerAggregatorSimulation = async (aggregator: "ZOMATO" | "SWIGGY") => {
-    if (!currentBranchId) {
+    if (!branchId) {
       toast.error("Please select a branch first");
       return;
     }
@@ -65,7 +65,7 @@ export default function IntegrationsHardwarePage() {
       const orderId = `${aggregator.toLowerCase()}-${Date.now().toString().slice(-6)}`;
       await api.post("/integrations/aggregators/order", {
         aggregator,
-        branchId: currentBranchId,
+        branchId: branchId,
         channelOrderId: orderId,
         channelOrderDisplayId: `#${orderId.slice(-4).toUpperCase()}`,
         customer: {
