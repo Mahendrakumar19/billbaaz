@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Flame, MessageCircle, Phone, Sparkles } from "lucide-react";
+import { Check, Flame, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -232,26 +232,20 @@ export function PricingSection() {
         </div>
       </Reveal>
 
-      {/* Direct Contact Banner */}
+      {/* Direct Call-to-Action Banner */}
       <Reveal className="mt-12 rounded-3xl bg-gradient-to-r from-primary/15 via-primary/5 to-transparent border border-primary/20 p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6">
         <div>
-          <h4 className="text-xl font-bold text-foreground">Need a personalized setup for your outlet?</h4>
+          <h4 className="text-xl font-bold text-foreground">Ready to take your restaurant to the next level?</h4>
           <p className="mt-1 text-xs text-muted-foreground">
-            Our restaurant onboarding team will configure your menu, GST, and printers in under 2 hours.
+            Sign up now and start billing with zero setup fee and a 14-day risk-free trial.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3 shrink-0">
-          <a
-            href="https://wa.me/919999999999?text=Hello%20BillBaaz%2C%20I%20want%20a%20demo%20for%20my%20restaurant"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-xl bg-[#25D366] px-5 py-2.5 text-xs font-bold text-white shadow hover:bg-[#20ba59] transition-colors"
-          >
-            <MessageCircle className="size-4" />
-            WhatsApp for Demo
-          </a>
-          <Button variant="outline" render={<Link href="/signup" />} className="rounded-xl h-10 text-xs">
-            Create Free Account
+          <Button render={<Link href="/signup" />} className="rounded-xl h-11 px-6 text-sm font-semibold">
+            Start 14-Day Free Trial &rarr;
+          </Button>
+          <Button variant="outline" render={<Link href="/login" />} className="rounded-xl h-11 px-5 text-sm">
+            Restaurant Sign In
           </Button>
         </div>
       </Reveal>
