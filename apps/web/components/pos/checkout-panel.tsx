@@ -82,7 +82,7 @@ export function CheckoutPanel({
     : orderSnapshot;
   const [method, setMethod] = useState<PaymentMethodDto>("CASH");
   const [amountText, setAmountText] = useState("");
-  const [waPhone, setWaPhone] = useState(order.deliveryPhone || "");
+  const [waPhone, setWaPhone] = useState(initialCustomer?.phone || (order as { deliveryPhone?: string | null }).deliveryPhone || "");
   const [waSending, setWaSending] = useState(false);
   const [waSent, setWaSent] = useState(false);
   const [discountPercent, setDiscountPercent] = useState("0");
@@ -362,11 +362,11 @@ export function CheckoutPanel({
                     toPhone: waPhone,
                     orderNumber: completed.orderNumber,
                     totalAmount: Number(completed.totalAmount),
-                    items: order.items?.map((it) => ({
-                      name: it.nameSnapshot,
+                    items: ((live?.items || (order as { items?: Array<{ nameSnapshot?: string; quantity: number; unitPriceSnapshot?: string | number }> }).items || []) as Array<{ nameSnapshot?: string; quantity: number; unitPriceSnapshot?: string | number }>).map((it) => ({
+                      name: it.nameSnapshot || "Item",
                       quantity: it.quantity,
-                      price: Number(it.unitPriceSnapshot),
-                    })) || [],
+                      price: Number(it.unitPriceSnapshot || 0),
+                    })),
                   });
                   setWaSent(true);
                   toast.success(`Digital receipt sent on WhatsApp to ${waPhone}!`);

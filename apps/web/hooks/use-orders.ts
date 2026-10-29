@@ -24,8 +24,15 @@ export interface CreatedOrder {
   loyaltyDiscountAmount: string;
   totalAmount: string;
   deliveryFee?: string;
+  deliveryPhone?: string | null;
   status: string;
   payments?: { method: string; amount: string; tendered?: string | null; changeGiven?: string | null }[];
+  items?: {
+    id?: string;
+    nameSnapshot?: string;
+    quantity: number;
+    unitPriceSnapshot?: string | number;
+  }[];
 }
 
 /** What a checkout call answers with: the order plus where its settlement stands. */
