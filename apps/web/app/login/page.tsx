@@ -148,6 +148,20 @@ export default function LoginPage() {
             Create an account
           </Link>
         </p>
+
+        <p className="mt-6 text-center text-xs text-muted-foreground flex items-center justify-center gap-1">
+          <span>Made with</span>
+          <span className="text-rose-500">❤️</span>
+          <span>in India by</span>
+          <a
+            href="https://nighwantech.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-foreground hover:text-primary hover:underline transition-colors"
+          >
+            Nighwan Technology
+          </a>
+        </p>
       </motion.div>
     </main>
   );
