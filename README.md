@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="apps/web/public/brand-lockup.png" alt="Nodedr OrderRestro" width="520">
+<img src="apps/web/public/brand-lockup.svg" alt="BillBaaz — Billing ka baazigar" width="460">
 
-<img src="docs/orderrestro-cover.jpg" alt="Illustrative evening scene in an independent restaurant" width="100%">
+
 
 **Open-source, self-hosted restaurant POS & management system** — billing
 with **UPI QR payments**, tables, kitchen display (KDS), reservations,
@@ -21,12 +21,12 @@ dine-in, takeaway, delivery and kitchen operations.
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
 [![Status](https://img.shields.io/badge/status-active%20development-orange.svg)](./ROADMAP.md)
 
-Developed by [NodeDR Infotech Private Limited](https://www.nodedr.com/)
+Made with pride in India by [Nighwan Technology Private Limited](https://nighwantech.com)
 
-**[Try OrderRestro](https://orderrestro.nodedr.com/)** · **[Case study](https://www.raktimranjit.com/projects/orderrestro)** · **[Maintainer: Raktim Ranjit](https://www.raktimranjit.com/)**
+**[Website: nighwantech.com](https://nighwantech.com)** · **[Live App: billbaaz.com](https://billbaaz.com)**
 
 <p align="center">
-  <img src="docs/assets/hero-animated.svg" alt="Nodedr OrderRestro: animated overview with an illustrative sample screen" width="100%">
+  <img src="docs/assets/hero-animated.svg" alt="BillBaaz: animated overview with interactive sample POS screen" width="100%">
 </p>
 
 
@@ -45,7 +45,7 @@ Developed by [NodeDR Infotech Private Limited](https://www.nodedr.com/)
 
 ## What this is
 
-**Nodedr OrderRestro** is a purpose-built, offline-first Restaurant
+**BillBaaz** is a purpose-built, offline-first Restaurant
 Management System for restaurants, cafés, coffee shops, bakeries, fast
 food, fine dining, bars, food courts, cloud kitchens, and multi-branch
 chains. The whole stack — Postgres, API, and web app — runs on one local
