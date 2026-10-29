@@ -33,6 +33,12 @@ services:
     image: billbaaz-backend:${APP_VERSION:-dev}
     container_name: billbaaz-backend
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.billbaaz-api.rule=Host(`api.billbaaz.com`)"
+      - "traefik.http.routers.billbaaz-api.entrypoints=web,websecure"
+      - "traefik.http.routers.billbaaz-api.tls=true"
+      - "traefik.http.services.billbaaz-api.loadbalancer.server.port=4000"
     environment:
       DATABASE_URL: "postgresql://${POSTGRES_USER:-billbaaz}:${POSTGRES_PASSWORD:-billbaaz_dev_pw}@postgres:5432/${POSTGRES_DB:-billbaaz_restaurant}"
       JWT_SECRET: ${JWT_SECRET:?set a real JWT_SECRET in .env for anything beyond local dev}
@@ -110,6 +116,12 @@ services:
     image: billbaaz-web:${APP_VERSION:-dev}
     container_name: billbaaz-web
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.billbaaz-web.rule=Host(`billbaaz.com`) || Host(`www.billbaaz.com`) || Host(`app.billbaaz.com`) || Host(`kiosk.billbaaz.com`)"
+      - "traefik.http.routers.billbaaz-web.entrypoints=web,websecure"
+      - "traefik.http.routers.billbaaz-web.tls=true"
+      - "traefik.http.services.billbaaz-web.loadbalancer.server.port=3000"
     ports:
       - "${HOST_PORT:-1995}:3000"
     depends_on:
