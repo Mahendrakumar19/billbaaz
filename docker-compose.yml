@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-billbaaz}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nodedr_dev_pw}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-billbaaz_dev_pw}
       POSTGRES_DB: ${POSTGRES_DB:-billbaaz_restaurant}
     # Not published to the host — only the backend needs it, over the
     # internal Docker network. Uncomment `ports` below for local psql access.
@@ -58,7 +58,7 @@ services:
       # container below to pull the latest published images. Unset these two
       # and the Update button simply says this install can't update itself.
       UPDATER_URL: "http://updater:8080"
-      UPDATER_TOKEN: "${UPDATER_TOKEN:-nodedr-restaurant-updater}"
+      UPDATER_TOKEN: "${UPDATER_TOKEN:-billbaaz-restaurant-updater}"
       # Optional: S3 backup config can also be set from Settings > Backup
       # (persisted to the `backup_config` DB row, which takes priority over
       # these). Uncomment for a headless/CasaOS-style deployment that
@@ -142,7 +142,7 @@ services:
     container_name: billbaaz-updater
     restart: unless-stopped
     environment:
-      UPDATER_TOKEN: "${UPDATER_TOKEN:-nodedr-restaurant-updater}"
+      UPDATER_TOKEN: "${UPDATER_TOKEN:-billbaaz-restaurant-updater}"
       TARGET_CONTAINERS: "billbaaz-backend,billbaaz-web"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock

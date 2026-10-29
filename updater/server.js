@@ -1,4 +1,4 @@
-// NodeDR OrderRestro updater — a tiny sidecar that moves the app's containers to a
+// BillBaaz updater — a tiny sidecar that moves the app's containers to a
 // specific published version. Needed because a container can't replace itself,
 // and because CasaOS pins every image to an exact version (no :latest), so
 // "pull the same tag again" (Watchtower) would never find anything new.
@@ -17,7 +17,7 @@ const crypto = require('node:crypto');
 
 const SOCKET = process.env.DOCKER_SOCKET || '/var/run/docker.sock';
 const TOKEN = process.env.UPDATER_TOKEN || '';
-const TARGETS = (process.env.TARGET_CONTAINERS || 'nodedr-restaurant-backend,nodedr-restaurant-web').split(',').map((s) => s.trim()).filter(Boolean);
+const TARGETS = (process.env.TARGET_CONTAINERS || 'billbaaz-backend,billbaaz-web').split(',').map((s) => s.trim()).filter(Boolean);
 const PORT = Number(process.env.PORT || 8080);
 const VERSION_RE = /^\d+\.\d+\.\d+$/;
 

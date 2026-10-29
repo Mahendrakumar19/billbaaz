@@ -341,7 +341,7 @@ Write-Host "-- Smoke-testing staged web server startup" -ForegroundColor Yellow
 # Log lives OUTSIDE $StageDir deliberately — anything under $StageDir\server
 # is what build-windows-msix.ps1 packs into the MSIX payload, and a stray
 # file here (confirmed via CI) ends up shipped as a real package asset.
-$webSmokeLog = Join-Path ([System.IO.Path]::GetTempPath()) 'orderrestro-web-smoke-test.log'
+$webSmokeLog = Join-Path ([System.IO.Path]::GetTempPath()) 'BillBaaz-web-smoke-test.log'
 Remove-Item $webSmokeLog -ErrorAction SilentlyContinue
 $env:PORT = '19599'
 $env:HOSTNAME = '127.0.0.1'

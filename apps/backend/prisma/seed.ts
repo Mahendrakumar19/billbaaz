@@ -40,10 +40,40 @@ async function main() {
   const allPermissions = await prisma.permission.findMany();
   const permissionByKey = new Map(allPermissions.map((p) => [p.key, p]));
 
+  console.log('Purging legacy branding from database...');
+  await prisma.restaurant.updateMany({
+    where: {
+      OR: [
+        { name: { contains: 'nodedr', mode: 'insensitive' } },
+        { name: { contains: 'bistro', mode: 'insensitive' } },
+      ],
+    },
+    data: { name: 'BillBaaz Grand Cafe' },
+  });
+  await prisma.branch.updateMany({
+    where: {
+      OR: [
+        { name: { contains: 'main branch', mode: 'insensitive' } },
+        { address: { contains: 'demo street', mode: 'insensitive' } },
+      ],
+    },
+    data: {
+      name: 'Bandra West (Flagship)',
+      address: 'Linking Road, Bandra West, Mumbai 400050',
+    },
+  });
+  await prisma.user.updateMany({
+    where: {
+      name: { contains: 'demo owner', mode: 'insensitive' },
+    },
+    data: {
+      name: 'BillBaaz Admin',
+    },
+  });
+
   console.log('Creating demo restaurant + branch...');
   const restaurant = await prisma.restaurant.upsert({
-    where: { id: 'demo-restaurant' },
-    update: {},
+    where: { id: 'demo-restaurant' }, update: { name: 'BillBaaz Grand Cafe', currency: 'INR' },
     create: {
       id: 'demo-restaurant',
       name: 'BillBaaz Grand Cafe',
@@ -52,8 +82,7 @@ async function main() {
   });
 
   const branch = await prisma.branch.upsert({
-    where: { id: 'demo-branch' },
-    update: {},
+    where: { id: 'demo-branch' }, update: { name: 'Bandra West (Flagship)', address: 'Linking Road, Bandra West, Mumbai 400050' },
     create: {
       id: 'demo-branch',
       restaurantId: restaurant.id,

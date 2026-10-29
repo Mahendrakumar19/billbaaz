@@ -8,12 +8,12 @@
   <!--
     Package identity. Name/Publisher come from Partner Center's "View
     product identity" page for this app (Store ID 9NVPNLWW2FZ4, PFN
-    NODEDRINFOTECHLIMITED.NodedrOrderRestro_wsh4jzg5a6682) — Publisher MUST
+    NODEDRINFOTECHLIMITED.NodedrBillBaaz_wsh4jzg5a6682) — Publisher MUST
     exactly match the CN issued there, or Store validation and any
     Add-AppxPackage install reject the package.
   -->
   <Identity
-    Name="NODEDRINFOTECHLIMITED.NodedrOrderRestro"
+    Name="NODEDRINFOTECHLIMITED.NodedrBillBaaz"
     Publisher="CN=11C721FC-E399-4888-B532-7BFCD5C491B3"
     Version="1.0.4.0"
     ProcessorArchitecture="x64" />
@@ -37,7 +37,7 @@
   </Dependencies>
 
   <Applications>
-    <Application Id="OrderRestro" Executable="OrderRestro.exe" EntryPoint="Windows.FullTrustApplication">
+    <Application Id="BillBaaz" Executable="BillBaaz.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements
         DisplayName="BillBaaz"
         Description="BillBaaz — Billing ka baazigar. Modern restaurant POS & management system."
@@ -59,7 +59,7 @@
     Capabilities: deliberately minimal, per hardening brief sections 2/17/26.
 
     - internetClient: outbound HTTP(S) to the restaurant's LAN/local
-      OrderRestro server. This is the ONLY capability the app needs.
+      BillBaaz server. This is the ONLY capability the app needs.
     - runFullTrust: required for any Win32/.NET desktop app packaged as
       MSIX (this is what "EntryPoint=Windows.FullTrustApplication" above
       declares) — this is NOT the same thing as elevation/admin rights.
