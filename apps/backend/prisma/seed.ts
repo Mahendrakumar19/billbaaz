@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument */
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import {
@@ -73,7 +74,8 @@ async function main() {
 
   console.log('Creating demo restaurant + branch...');
   const restaurant = await prisma.restaurant.upsert({
-    where: { id: 'demo-restaurant' }, update: { name: 'BillBaaz Grand Cafe', currency: 'INR' },
+    where: { id: 'demo-restaurant' },
+    update: { name: 'BillBaaz Grand Cafe', currency: 'INR' },
     create: {
       id: 'demo-restaurant',
       name: 'BillBaaz Grand Cafe',
@@ -82,7 +84,11 @@ async function main() {
   });
 
   const branch = await prisma.branch.upsert({
-    where: { id: 'demo-branch' }, update: { name: 'Bandra West (Flagship)', address: 'Linking Road, Bandra West, Mumbai 400050' },
+    where: { id: 'demo-branch' },
+    update: {
+      name: 'Bandra West (Flagship)',
+      address: 'Linking Road, Bandra West, Mumbai 400050',
+    },
     create: {
       id: 'demo-branch',
       restaurantId: restaurant.id,
@@ -173,7 +179,9 @@ async function main() {
   });
 
   await prisma.userBranch.upsert({
-    where: { userId_branchId: { userId: adminBillbaaz.id, branchId: branch.id } },
+    where: {
+      userId_branchId: { userId: adminBillbaaz.id, branchId: branch.id },
+    },
     update: {},
     create: { userId: adminBillbaaz.id, branchId: branch.id },
   });
