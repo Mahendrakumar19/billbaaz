@@ -548,7 +548,7 @@ export default function AggregatorsPage() {
 
       {/* One-Time Setup Dialog */}
       <Dialog open={isConfigOpen} onOpenChange={setIsConfigOpen}>
-        <DialogContent className="max-w-xl rounded-2xl">
+        <DialogContent className="sm:max-w-xl w-full max-w-[95vw] rounded-2xl overflow-x-hidden p-6">
           <DialogHeader>
             <DialogTitle>Connect Zomato &amp; Swiggy Outlets</DialogTitle>
             <DialogDescription>
@@ -598,7 +598,7 @@ export default function AggregatorsPage() {
                 </label>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <Label className="text-xs">Zomato Restaurant ID (ResId)</Label>
                   <Input
@@ -650,7 +650,7 @@ export default function AggregatorsPage() {
                 </label>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <Label className="text-xs">Swiggy Merchant / Store ID</Label>
                   <Input
@@ -683,10 +683,10 @@ export default function AggregatorsPage() {
             </div>
 
             {/* Webhook Endpoint for Partner Portal */}
-            <div className="rounded-xl bg-card border border-border/60 p-3 text-xs flex items-center justify-between">
-              <div>
-                <span className="font-semibold text-foreground">Your Webhook URL for Zomato &amp; Swiggy:</span>
-                <p className="font-mono text-[11px] text-muted-foreground mt-0.5">
+            <div className="rounded-xl bg-card border border-border/60 p-3 text-xs flex items-center justify-between gap-2 min-w-0">
+              <div className="min-w-0 flex-1">
+                <span className="font-semibold text-foreground block">Your Webhook URL for Zomato &amp; Swiggy:</span>
+                <p className="font-mono text-[11px] text-muted-foreground mt-0.5 truncate select-all">
                   https://billbaaz.com/api/v1/integrations/aggregators/order
                 </p>
               </div>
@@ -694,7 +694,7 @@ export default function AggregatorsPage() {
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="h-8"
+                className="h-8 shrink-0"
                 onClick={() => {
                   navigator.clipboard.writeText("https://billbaaz.com/api/v1/integrations/aggregators/order");
                   toast.success("Webhook URL copied to clipboard!");
