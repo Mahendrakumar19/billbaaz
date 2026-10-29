@@ -471,7 +471,8 @@ async function main() {
 
     let ticketSeq = 1;
     for (const [stationId, items] of itemsByStation) {
-      const kot = await prisma.kot.upsert({
+      const kotId = `${demoOrder.id}-kot-${ticketSeq}`;
+      await prisma.kot.upsert({
         where: { id: `${demoOrder.id}-kot-${ticketSeq}` },
         update: {},
         create: {
@@ -492,11 +493,11 @@ async function main() {
       ticketSeq += 1;
       for (const item of items) {
         await prisma.kotItem.upsert({
-          where: { id: `${kot.id}-${item.id}` },
+          where: { id: `${kotId}-${item.id}` },
           update: {},
           create: {
-            id: `${kot.id}-${item.id}`,
-            kotId: kot.id,
+            id: `${kotId}-${item.id}`,
+            kotId,
             orderItemId: item.id,
             status: itemStatus,
           },
