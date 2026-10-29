@@ -5,24 +5,26 @@ const columns = [
   {
     title: "Product",
     links: [
-      { href: "#features", label: "Features" },
-      { href: "#security", label: "Security" },
-      { href: "#get-started", label: "Get started" },
+      { href: "#features", label: "POS Features" },
+      { href: "#pricing", label: "Plans & Pricing" },
+      { href: "/signup", label: "Start Free Trial" },
     ],
   },
   {
-    title: "Resources",
+    title: "Solutions",
     links: [
-      { href: "/docs/api", label: "API & Integrations" },
-      { href: "/docs/accessibility", label: "Accessibility statement" },
-      { href: "/docs/compliance-india", label: "India compliance notes" },
+      { href: "/signup", label: "Dine-in Restaurants" },
+      { href: "/signup", label: "Cloud Kitchens" },
+      { href: "/signup", label: "Cafes & QSR" },
+      { href: "/signup", label: "Multi-branch Franchises" },
     ],
   },
   {
-    title: "Account",
+    title: "Company & Access",
     links: [
-      { href: "/login", label: "Sign in" },
-      { href: "/signup", label: "Create account" },
+      { href: "/login", label: "Restaurant Login" },
+      { href: "/signup", label: "Register New Outlet" },
+      { href: "https://nighwantech.com", label: "Nighwan Technology" },
     ],
   },
 ];
@@ -41,8 +43,7 @@ export function MarketingFooter() {
               </div>
             </Link>
             <p className="mt-3 max-w-xs text-sm text-muted-foreground">
-              Offline-first restaurant management & POS, self-hosted on your own
-              server. Built for high performance, zero downtime, and complete data ownership.
+              Commercial restaurant operating system, high-speed billing POS, and online order aggregator terminal.
             </p>
           </div>
 
@@ -71,7 +72,17 @@ export function MarketingFooter() {
           <p className="text-xs text-muted-foreground">
             &copy; {new Date().getFullYear()} BillBaaz. All rights reserved.
           </p>
-          <p className="text-xs text-muted-foreground">Made with pride in India.</p>
+          <p className="text-xs text-muted-foreground">
+            Made with pride in India by{" "}
+            <a
+              href="https://nighwantech.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-foreground hover:text-primary hover:underline transition-colors"
+            >
+              Nighwan Technology Pvt. Ltd. (nighwantech.com)
+            </a>
+          </p>
         </div>
       </div>
     </footer>

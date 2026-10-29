@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 const links = [
   { href: "#features", label: "Features" },
   { href: "#security", label: "Security" },
-  { href: "#get-started", label: "Get started" },
+  { href: "#pricing", label: "Pricing & Plans" },
 ];
 
 export function MarketingNav() {
