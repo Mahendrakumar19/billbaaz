@@ -86,9 +86,7 @@ export class AggregatorsController {
 
     // Look for matching menu items by name snapshot or fallback to generic item
     const existingMenuItems = await this.prisma.menuItem.findMany({
-      where: {
-        category: { menu: { branchId: branch.id } },
-      },
+      where: { branchId: branch.id },
     });
 
     const menuMap = new Map(existingMenuItems.map((m) => [m.name.toLowerCase().trim(), m]));
@@ -106,12 +104,18 @@ export class AggregatorsController {
 
     const nextOrderNumber = await (this.ordersService as any).nextOrderNumber(data.branchId);
 
+    const defaultUser = await this.prisma.user.findFirst({
+      where: { restaurantId: branch.restaurantId },
+      select: { id: true },
+    });
+
     // Save order in database with channel tracking
     const order = await this.prisma.$transaction(async (tx) => {
       const created = await tx.order.create({
         data: {
           branchId: data.branchId,
           orderNumber: nextOrderNumber,
+          createdById: defaultUser?.id || 'system',
           type: 'DELIVERY',
           channel: 'ONLINE',
           acceptance: 'NOT_REQUIRED',
@@ -153,7 +157,7 @@ export class AggregatorsController {
         where: { orderId: created.id },
       });
 
-      const kotNumber = 1;
+      const kotNumber = '1';
       const kot = await tx.kot.create({
         data: {
           orderId: created.id,

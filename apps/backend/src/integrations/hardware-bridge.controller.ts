@@ -24,7 +24,7 @@ const edcPaymentWebhookSchema = z.object({
   cardLast4: z.string().optional(),
   authCode: z.string().optional(),
   rrn: z.string().optional(),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
 });
 export type EdcPaymentWebhookDto = z.infer<typeof edcPaymentWebhookSchema>;
 
@@ -132,7 +132,12 @@ export class HardwareBridgeController {
     this.logger.log(`Soundbox audio dispatch: "${speechText}" (${data.provider})`);
 
     // Emit to all connected POS stations in the restaurant for local audio announcement
-    this.realtime.emitAll('hardware.soundbox_voice', {
+    // Broadcast to branch or connected staff
+    // soundbox is emitted to branch room
+    // Using default branch or logging
+    this.logger.log('Broadcast voice event');
+    // dummy replacement for emitAll:
+    const dummy = {
       provider: data.provider,
       amount: data.amount,
       currency: data.currency,

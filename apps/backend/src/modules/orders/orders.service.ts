@@ -1977,6 +1977,7 @@ export class OrdersService {
         data: {
           branchId,
           orderNumber: newOrderNumber,
+          createdById: userId,
           type: sourceOrder.type,
           channel: sourceOrder.channel,
           acceptance: 'NOT_REQUIRED',
@@ -2048,7 +2049,7 @@ export class OrdersService {
                 orderItemId: createdItem.id,
                 modifierId: mod.modifierId,
                 nameSnapshot: mod.nameSnapshot,
-                priceAdjustmentSnapshot: mod.priceAdjustmentSnapshot,
+                priceAdjSnapshot: mod.priceAdjSnapshot,
               },
             });
           }
@@ -2105,7 +2106,6 @@ export class OrdersService {
     });
 
     await this.audit.record({
-      branchId,
       userId,
       action: 'orders.split',
       entity: 'Order',
