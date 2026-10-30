@@ -14,6 +14,8 @@ export interface Customer {
   anniversary: string | null;
   allergies: string | null;
   notes: string | null;
+  customerType?: string | null;
+  whatsappOptIn?: boolean;
   marketingOptOut?: boolean;
   loyaltyPoints: number;
   walletBalance: string;

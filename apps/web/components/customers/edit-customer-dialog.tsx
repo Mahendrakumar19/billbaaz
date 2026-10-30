@@ -1,5 +1,6 @@
 "use client";
 
+import { Cake, Calendar, Heart, MessageSquare, Sparkles, UserRound } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -16,9 +17,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { useUpdateCustomer, type Customer } from "@/hooks/use-customers";
 import { ApiError } from "@/lib/api";
 
-// Mounted only while a specific customer is being edited (see CustomersPage
-// / customer detail page), keyed by customer.id — same pattern as
-// EditRoleDialog/EditCategoryDialog.
 export function EditCustomerDialog({
   branchId,
   customer,
@@ -31,30 +29,49 @@ export function EditCustomerDialog({
   const [name, setName] = useState(customer.name ?? "");
   const [phone, setPhone] = useState(customer.phone ?? "");
   const [email, setEmail] = useState(customer.email ?? "");
+  const [customerType, setCustomerType] = useState<"REGULAR" | "VIP" | "CORPORATE">(
+    (customer.customerType as "REGULAR" | "VIP" | "CORPORATE") ?? "REGULAR",
+  );
+  const [birthday, setBirthday] = useState(
+    customer.birthday ? new Date(customer.birthday).toISOString().split("T")[0] : "",
+  );
+  const [anniversary, setAnniversary] = useState(
+    customer.anniversary ? new Date(customer.anniversary).toISOString().split("T")[0] : "",
+  );
   const [address, setAddress] = useState(customer.address ?? "");
   const [allergies, setAllergies] = useState(customer.allergies ?? "");
   const [notes, setNotes] = useState(customer.notes ?? "");
+  const [whatsappOptIn, setWhatsappOptIn] = useState(customer.whatsappOptIn ?? true);
   const [optOut, setOptOut] = useState(customer.marketingOptOut ?? false);
   const updateCustomer = useUpdateCustomer(branchId);
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!name.trim()) {
+      toast.error("Customer name is required");
+      return;
+    }
+
     updateCustomer.mutate(
       {
         id: customer.id,
         dto: {
-          name: name || undefined,
-          phone: phone || undefined,
-          email: email || undefined,
-          address: address || undefined,
-          allergies: allergies || undefined,
-          notes: notes || undefined,
+          name: name.trim(),
+          phone: phone.trim() || undefined,
+          email: email.trim() || undefined,
+          address: address.trim() || undefined,
+          customerType,
+          birthday: birthday ? new Date(birthday) : undefined,
+          anniversary: anniversary ? new Date(anniversary) : undefined,
+          allergies: allergies.trim() || undefined,
+          notes: notes.trim() || undefined,
+          whatsappOptIn,
           marketingOptOut: optOut,
         },
       },
       {
         onSuccess: () => {
-          toast.success(`${name || "Customer"} updated`);
+          toast.success(`${name} updated successfully`);
           onClose();
         },
         onError: (err) =>
@@ -65,51 +82,230 @@ export function EditCustomerDialog({
 
   return (
     <Dialog open onOpenChange={(next) => !next && onClose()}>
-      <DialogContent className="sm:max-w-sm">
+      <DialogContent className="sm:max-w-md max-h-[92vh] overflow-y-auto">
         <form onSubmit={onSubmit} className="flex flex-col gap-4">
           <DialogHeader>
-            <DialogTitle>Edit customer</DialogTitle>
+            <DialogTitle className="flex items-center gap-2 text-base">
+              <UserRound className="h-4 w-4 text-primary" />
+              Edit Customer Profile
+            </DialogTitle>
           </DialogHeader>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="c-edit-name">Name</Label>
-            <Input id="c-edit-name" value={name} onChange={(e) => setName(e.target.value)} autoFocus />
+
+          {/* Core Info */}
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="c-edit-name" className="text-xs font-semibold text-foreground">
+                  Customer Name <span className="text-destructive">*</span>
+                </Label>
+                <span className="text-[10px] text-destructive/80 font-medium">Required</span>
+              </div>
+              <Input
+                id="c-edit-name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                autoFocus
+                required
+                className="h-9 text-xs"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="c-edit-phone" className="text-xs font-semibold text-foreground">
+                    Phone Number
+                  </Label>
+                  <span className="text-[10px] text-primary/80 font-medium">Recommended</span>
+                </div>
+                <Input
+                  id="c-edit-phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="h-9 text-xs"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="c-edit-email" className="text-xs font-medium text-foreground">
+                    Email
+                  </Label>
+                  <span className="text-[10px] text-muted-foreground">Optional</span>
+                </div>
+                <Input
+                  id="c-edit-email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="h-9 text-xs"
+                />
+              </div>
+            </div>
+
+            {/* Customer Type / Badge */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between">
+                <Label className="text-xs font-medium text-foreground">Customer Type</Label>
+                <span className="text-[10px] text-muted-foreground">Optional</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {(["REGULAR", "VIP", "CORPORATE"] as const).map((type) => (
+                  <button
+                    key={type}
+                    type="button"
+                    onClick={() => setCustomerType(type)}
+                    className={`h-8 rounded-lg border text-xs font-semibold transition-all ${
+                      customerType === type
+                        ? type === "VIP"
+                          ? "border-amber-500/80 bg-amber-500/15 text-amber-600 dark:text-amber-400 font-bold"
+                          : type === "CORPORATE"
+                          ? "border-sky-500/80 bg-sky-500/15 text-sky-600 dark:text-sky-400 font-bold"
+                          : "border-primary bg-primary/10 text-primary font-bold"
+                        : "border-border/60 bg-muted/30 text-muted-foreground hover:bg-muted"
+                    }`}
+                  >
+                    {type === "VIP" && "⭐ "}
+                    {type === "CORPORATE" && "💼 "}
+                    {type.charAt(0) + type.slice(1).toLowerCase()}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="c-edit-phone">Phone</Label>
-            <Input id="c-edit-phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
+
+          {/* Special Dates Section */}
+          <div className="rounded-xl border border-border/80 bg-muted/20 p-3.5 flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                <Sparkles className="size-3.5 text-amber-500" />
+                Special Dates &amp; Occasions
+              </span>
+              <span className="text-[10px] text-muted-foreground">Optional</span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="c-edit-bday" className="text-[11px] font-medium text-foreground flex items-center gap-1">
+                  <Cake className="size-3 text-rose-500" /> Birthday
+                </Label>
+                <Input
+                  id="c-edit-bday"
+                  type="date"
+                  value={birthday}
+                  onChange={(e) => setBirthday(e.target.value)}
+                  className="h-8 text-xs bg-background"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="c-edit-anni" className="text-[11px] font-medium text-foreground flex items-center gap-1">
+                  <Heart className="size-3 text-pink-500" /> Marriage Anniversary
+                </Label>
+                <Input
+                  id="c-edit-anni"
+                  type="date"
+                  value={anniversary}
+                  onChange={(e) => setAnniversary(e.target.value)}
+                  className="h-8 text-xs bg-background"
+                />
+              </div>
+            </div>
+            <p className="text-[10px] text-muted-foreground leading-tight">
+              🎂 BillBaaz can send automated celebratory coupons and special dining invitations.
+            </p>
           </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="c-edit-email">Email</Label>
-            <Input
-              id="c-edit-email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+
+          {/* Notes & Allergies */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="c-edit-allergies" className="text-xs font-medium text-foreground">
+                Allergies
+              </Label>
+              <Input
+                id="c-edit-allergies"
+                placeholder="e.g. Peanuts, Gluten"
+                value={allergies}
+                onChange={(e) => setAllergies(e.target.value)}
+                className="h-8 text-xs"
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="c-edit-address" className="text-xs font-medium text-foreground">
+                Address
+              </Label>
+              <Input
+                id="c-edit-address"
+                placeholder="Delivery address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="h-8 text-xs"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="c-edit-notes" className="text-xs font-medium text-foreground">
+                Notes &amp; Preferences
+              </Label>
+              <span className="text-[10px] text-muted-foreground">Optional</span>
+            </div>
+            <Textarea
+              id="c-edit-notes"
+              placeholder="e.g. Prefers window table, less spicy food"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              className="h-16 text-xs resize-none"
             />
           </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="c-edit-address">Address</Label>
-            <Input id="c-edit-address" value={address} onChange={(e) => setAddress(e.target.value)} />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="c-edit-allergies">Allergies</Label>
-            <Input
-              id="c-edit-allergies"
-              value={allergies}
-              onChange={(e) => setAllergies(e.target.value)}
+
+          {/* WhatsApp Offers Opt-in */}
+          <label className="flex items-start gap-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-2.5 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={whatsappOptIn}
+              onChange={(e) => setWhatsappOptIn(e.target.checked)}
+              className="mt-0.5 rounded text-emerald-600 focus:ring-emerald-500 size-4"
             />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="c-edit-notes">Notes</Label>
-            <Textarea id="c-edit-notes" value={notes} onChange={(e) => setNotes(e.target.value)} />
-          </div>
-          <label className="flex items-center gap-2 text-sm text-foreground">
-            <input type="checkbox" checked={optOut} onChange={(e) => setOptOut(e.target.checked)} />
-            Do not send marketing messages to this customer
+            <div className="flex flex-col">
+              <span className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+                <MessageSquare className="size-3.5 text-emerald-600" />
+                WhatsApp Special Offers &amp; Updates
+              </span>
+              <span className="text-[11px] text-muted-foreground leading-tight mt-0.5">
+                Customer consented to receive WhatsApp anniversary coupons &amp; promotions.
+              </span>
+            </div>
           </label>
-          <DialogFooter>
-            <Button type="submit" disabled={updateCustomer.isPending}>
-              {updateCustomer.isPending ? "Saving…" : "Save changes"}
+
+          <label className="flex items-center gap-2 text-xs text-muted-foreground">
+            <input
+              type="checkbox"
+              checked={optOut}
+              onChange={(e) => setOptOut(e.target.checked)}
+              className="rounded"
+            />
+            Marketing opt-out (Do not send bulk SMS / Email campaigns)
+          </label>
+
+          <DialogFooter className="mt-1">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={onClose}
+              className="h-9 text-xs"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              size="sm"
+              disabled={updateCustomer.isPending}
+              className="h-9 text-xs font-semibold"
+            >
+              {updateCustomer.isPending ? "Saving…" : "Save Changes"}
             </Button>
           </DialogFooter>
         </form>

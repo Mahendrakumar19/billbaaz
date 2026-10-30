@@ -116,7 +116,6 @@ export function MarketingFooter() {
               rel="noopener noreferrer"
               className="font-mono text-[11px] text-muted-foreground hover:text-primary hover:underline transition-colors"
             >
-              nighwantech.com
             </a>
           </div>
         </div>

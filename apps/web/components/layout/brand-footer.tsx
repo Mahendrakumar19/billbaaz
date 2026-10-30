@@ -22,7 +22,6 @@ export function BrandFooter() {
         rel="noopener noreferrer"
         className="text-[10px] font-mono text-muted-foreground hover:text-primary hover:underline transition-colors"
       >
-        nighwantech.com
       </a>
     </div>
   );

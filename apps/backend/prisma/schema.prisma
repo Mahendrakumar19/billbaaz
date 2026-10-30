@@ -1162,6 +1162,8 @@ model Customer {
   anniversary DateTime?
   allergies   String?
   notes       String?
+  customerType String? @default("REGULAR")
+  whatsappOptIn Boolean @default(true)
 
   loyaltyPoints   Int     @default(0)
   // Opted out of marketing messages; excluded from every campaign audience.

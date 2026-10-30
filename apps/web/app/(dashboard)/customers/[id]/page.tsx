@@ -50,9 +50,11 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
             <ArrowLeft className="h-3.5 w-3.5" />
             Customers
           </Link>
-          <h1 className="mt-2 text-[32px] font-semibold tracking-tight text-foreground">
-            {customer.name ?? "Unnamed customer"}
-          </h1>
+          <div className="flex items-center gap-3 mt-2">
+            <h1 className="text-[32px] font-semibold tracking-tight text-foreground">{customer.name ?? "Unnamed customer"}</h1>
+            {customer.customerType === "VIP" && (<span className="rounded-full bg-amber-500/15 px-2.5 py-0.5 text-xs font-bold text-amber-600 dark:text-amber-400 border border-amber-500/30">⭐ VIP</span>)}
+            {customer.customerType === "CORPORATE" && (<span className="rounded-full bg-sky-500/15 px-2.5 py-0.5 text-xs font-bold text-sky-600 dark:text-sky-400 border border-sky-500/30">💼 Corporate</span>)}
+          </div>
           <p className="text-sm text-muted-foreground">
             {[customer.phone, customer.email, customer.address].filter(Boolean).join(" · ") ||
               "No contact info on file"}
@@ -110,6 +112,34 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
           </div>
         </Card>
       </div>
+
+      {(customer.birthday || customer.anniversary) && (
+        <Card className="p-5 bg-muted/20 border-border/80">
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary flex items-center gap-1.5">
+            Special Dates & Celebrations
+          </p>
+          <div className="mt-3 flex flex-wrap gap-6 text-sm">
+            {customer.birthday && (
+              <div className="flex items-center gap-2">
+                <span className="text-lg">🎂</span>
+                <div>
+                  <p className="text-[11px] text-muted-foreground font-medium">Birthday</p>
+                  <p className="font-semibold text-foreground">{new Date(customer.birthday).toLocaleDateString("en-IN", { month: "long", day: "numeric", year: "numeric" })}</p>
+                </div>
+              </div>
+            )}
+            {customer.anniversary && (
+              <div className="flex items-center gap-2">
+                <span className="text-lg">💑</span>
+                <div>
+                  <p className="text-[11px] text-muted-foreground font-medium">Marriage Anniversary</p>
+                  <p className="font-semibold text-foreground">{new Date(customer.anniversary).toLocaleDateString("en-IN", { month: "long", day: "numeric", year: "numeric" })}</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </Card>
+      )}
 
       {customer.allergies && (
         <Card className="p-5">

@@ -151,7 +151,6 @@ export default function SignupPage() {
             rel="noopener noreferrer"
             className="text-[11px] font-mono text-muted-foreground hover:text-primary hover:underline transition-colors"
           >
-            nighwantech.com
           </a>
         </div>
       </motion.div>

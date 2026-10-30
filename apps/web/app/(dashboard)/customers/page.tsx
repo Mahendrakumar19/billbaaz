@@ -64,9 +64,7 @@ export default function CustomersPage() {
               className="flex items-center justify-between gap-4 px-4 py-3 transition-colors hover:bg-secondary"
             >
               <div className="flex flex-col">
-                <span className="text-sm font-medium text-foreground">
-                  {c.name ?? "Unnamed customer"}
-                </span>
+                <div className="flex items-center gap-2"><span className="text-sm font-medium text-foreground">{c.name ?? "Unnamed customer"}</span>{c.customerType === "VIP" && (<span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-bold text-amber-600 dark:text-amber-400 border border-amber-500/30">? VIP</span>)}{c.customerType === "CORPORATE" && (<span className="rounded-full bg-sky-500/15 px-2 py-0.5 text-[10px] font-bold text-sky-600 dark:text-sky-400 border border-sky-500/30">?? Corporate</span>)}</div>
                 <span className="text-xs text-muted-foreground">
                   {[c.phone, c.email].filter(Boolean).join(" · ") || "No contact info"}
                 </span>
