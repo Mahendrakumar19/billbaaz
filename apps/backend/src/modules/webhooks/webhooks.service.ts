@@ -224,7 +224,7 @@ export class WebhooksService {
         payload: {
           event: 'test',
           createdAt: new Date().toISOString(),
-          data: { message: 'Hello from OrderRestro' },
+          data: { message: 'Hello from BillBaaz' },
         },
       },
     });
@@ -357,7 +357,7 @@ export class WebhooksService {
           headers: {
             'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(body),
-            'User-Agent': 'OrderRestro-Webhooks/1',
+            'User-Agent': 'BillBaaz-Webhooks/1',
             ...headers,
           },
           // Connect to the address we already vetted; TLS still validates

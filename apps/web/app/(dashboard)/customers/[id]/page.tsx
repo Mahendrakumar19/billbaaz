@@ -1,6 +1,18 @@
 "use client";
 
-import { ArrowLeft, CreditCard, Gift, Pencil, Star, Trash2 } from "lucide-react";
+import {
+  ArrowLeft,
+  Cake,
+  CreditCard,
+  Gift,
+  Heart,
+  MessageSquare,
+  MessageSquareOff,
+  Pencil,
+  Send,
+  Star,
+  Trash2,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { use, useState } from "react";
@@ -12,7 +24,7 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useBranch } from "@/hooks/use-branch";
 import { useCustomer, useDeleteCustomer } from "@/hooks/use-customers";
-import { ApiError } from "@/lib/api";
+import { api, ApiError } from "@/lib/api";
 import { formatCurrency } from "@/lib/format";
 
 export default function CustomerDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -22,6 +34,36 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
   const router = useRouter();
   const deleteCustomer = useDeleteCustomer(branchId);
   const [isEditing, setIsEditing] = useState(false);
+  const [sendingWish, setSendingWish] = useState<string | null>(null);
+
+  const onSendWish = async (type: "BIRTHDAY" | "ANNIVERSARY") => {
+    if (!branchId || !customer?.id) return;
+    if (!customer.phone) {
+      toast.error("Customer does not have a phone number on file");
+      return;
+    }
+    setSendingWish(type);
+    try {
+      const res: any = await api.post("/integrations/whatsapp/send-celebration-wish", {
+        branchId,
+        customerId: customer.id,
+        type,
+      });
+      if (res?.messagePreview) {
+        toast.success(
+          `${type === "BIRTHDAY" ? "Birthday" : "Anniversary"} offer sent to +${res.phone || customer.phone}!`,
+        );
+      } else {
+        toast.success(
+          `${type === "BIRTHDAY" ? "Birthday" : "Anniversary"} offer dispatched successfully!`,
+        );
+      }
+    } catch (err: any) {
+      toast.error(err?.message || "Failed to dispatch WhatsApp offer");
+    } finally {
+      setSendingWish(null);
+    }
+  };
 
   if (isLoading || !customer) {
     return <Skeleton className="h-96 rounded-2xl" />;
@@ -50,10 +92,19 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
             <ArrowLeft className="h-3.5 w-3.5" />
             Customers
           </Link>
-          <div className="flex items-center gap-3 mt-2">
+          <div className="flex flex-wrap items-center gap-2.5 mt-2">
             <h1 className="text-[32px] font-semibold tracking-tight text-foreground">{customer.name ?? "Unnamed customer"}</h1>
             {customer.customerType === "VIP" && (<span className="rounded-full bg-amber-500/15 px-2.5 py-0.5 text-xs font-bold text-amber-600 dark:text-amber-400 border border-amber-500/30">⭐ VIP</span>)}
             {customer.customerType === "CORPORATE" && (<span className="rounded-full bg-sky-500/15 px-2.5 py-0.5 text-xs font-bold text-sky-600 dark:text-sky-400 border border-sky-500/30">💼 Corporate</span>)}
+            {customer.whatsappOptIn !== false ? (
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                <MessageSquare className="size-3" /> WhatsApp Offers Opted-In
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground border">
+                <MessageSquareOff className="size-3" /> No WhatsApp Marketing
+              </span>
+            )}
           </div>
           <p className="text-sm text-muted-foreground">
             {[customer.phone, customer.email, customer.address].filter(Boolean).join(" · ") ||
@@ -118,23 +169,53 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
           <p className="text-xs font-semibold uppercase tracking-wide text-primary flex items-center gap-1.5">
             Special Dates & Celebrations
           </p>
-          <div className="mt-3 flex flex-wrap gap-6 text-sm">
+          <div className="mt-3 flex flex-wrap gap-4 text-sm">
             {customer.birthday && (
-              <div className="flex items-center gap-2">
-                <span className="text-lg">🎂</span>
-                <div>
-                  <p className="text-[11px] text-muted-foreground font-medium">Birthday</p>
-                  <p className="font-semibold text-foreground">{new Date(customer.birthday).toLocaleDateString("en-IN", { month: "long", day: "numeric", year: "numeric" })}</p>
+              <div className="flex items-center justify-between gap-4 p-2.5 rounded-xl border border-border/60 bg-background min-w-[260px]">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-xl">🎂</span>
+                  <div>
+                    <p className="text-[11px] text-muted-foreground font-medium">Birthday</p>
+                    <p className="font-semibold text-foreground text-xs">{new Date(customer.birthday).toLocaleDateString("en-IN", { month: "long", day: "numeric", year: "numeric" })}</p>
+                  </div>
                 </div>
+                {customer.phone && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={sendingWish === "BIRTHDAY"}
+                    onClick={() => onSendWish("BIRTHDAY")}
+                    className="h-7 text-[11px] gap-1 px-2.5 border-rose-500/40 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20"
+                    title="Send Birthday coupon offer on WhatsApp"
+                  >
+                    <Send className="size-3" />
+                    {sendingWish === "BIRTHDAY" ? "Sending…" : "Send Offer"}
+                  </Button>
+                )}
               </div>
             )}
             {customer.anniversary && (
-              <div className="flex items-center gap-2">
-                <span className="text-lg">💑</span>
-                <div>
-                  <p className="text-[11px] text-muted-foreground font-medium">Marriage Anniversary</p>
-                  <p className="font-semibold text-foreground">{new Date(customer.anniversary).toLocaleDateString("en-IN", { month: "long", day: "numeric", year: "numeric" })}</p>
+              <div className="flex items-center justify-between gap-4 p-2.5 rounded-xl border border-border/60 bg-background min-w-[260px]">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-xl">💑</span>
+                  <div>
+                    <p className="text-[11px] text-muted-foreground font-medium">Marriage Anniversary</p>
+                    <p className="font-semibold text-foreground text-xs">{new Date(customer.anniversary).toLocaleDateString("en-IN", { month: "long", day: "numeric", year: "numeric" })}</p>
+                  </div>
                 </div>
+                {customer.phone && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={sendingWish === "ANNIVERSARY"}
+                    onClick={() => onSendWish("ANNIVERSARY")}
+                    className="h-7 text-[11px] gap-1 px-2.5 border-pink-500/40 text-pink-600 hover:bg-pink-50 dark:hover:bg-pink-950/20"
+                    title="Send Anniversary coupon offer on WhatsApp"
+                  >
+                    <Send className="size-3" />
+                    {sendingWish === "ANNIVERSARY" ? "Sending…" : "Send Offer"}
+                  </Button>
+                )}
               </div>
             )}
           </div>

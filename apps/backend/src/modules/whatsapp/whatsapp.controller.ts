@@ -58,5 +58,32 @@ export class WhatsAppController {
   ) {
     return this.whatsappService.sendOwnerEodDigest(body.branchId, body.ownerPhone);
   }
+
+  @Post('dispatch-celebrations')
+  async dispatchCelebrations(
+    @Body()
+    body: {
+      branchId: string;
+      dryRun?: boolean;
+    },
+  ) {
+    return this.whatsappService.dispatchCelebrationOffers(body.branchId, body.dryRun);
+  }
+
+  @Post('send-celebration-wish')
+  async sendCelebrationWish(
+    @Body()
+    body: {
+      branchId: string;
+      customerId: string;
+      type: 'BIRTHDAY' | 'ANNIVERSARY';
+    },
+  ) {
+    return this.whatsappService.sendCustomerCelebrationWish(
+      body.branchId,
+      body.customerId,
+      body.type,
+    );
+  }
 }
 

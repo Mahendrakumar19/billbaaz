@@ -192,7 +192,7 @@ export class UpdateService {
       {
         headers: {
           Accept: 'application/vnd.github+json',
-          'User-Agent': 'nodedr-restaurant-pos-update-check',
+          'User-Agent': 'billbaaz-update-check',
         },
         signal: AbortSignal.timeout(5000),
       },

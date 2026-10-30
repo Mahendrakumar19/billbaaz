@@ -13,6 +13,12 @@ export interface WhatsAppConfig {
   ownerNotificationPhone?: string;
   sendCustomerBill: boolean;
   sendDailyEodSummary: boolean;
+  sendBirthdayOffers: boolean;
+  sendAnniversaryOffers: boolean;
+  birthdayCouponCode?: string;
+  anniversaryCouponCode?: string;
+  birthdayOfferNote?: string;
+  anniversaryOfferNote?: string;
 }
 
 @Injectable()
@@ -49,6 +55,12 @@ export class WhatsAppService {
       ownerNotificationPhone: '',
       sendCustomerBill: true,
       sendDailyEodSummary: true,
+      sendBirthdayOffers: true,
+      sendAnniversaryOffers: true,
+      birthdayCouponCode: 'BDAY15',
+      anniversaryCouponCode: 'ANNI15',
+      birthdayOfferNote: '15% OFF on dining bill + Complimentary Birthday Dessert 🎂',
+      anniversaryOfferNote: '15% OFF on celebration dinner + Chef Special Treat 💑',
     };
   }
 
@@ -244,6 +256,215 @@ _Powered by Nighwan Technology Pvt. Ltd. (nighwantech.com)_`;
       phone: phoneWithCode,
       messagePreview: messageText,
     };
+  }
+
+  /**
+   * Helper to dispatch text message via Meta API or Simulation
+   */
+  private async dispatchTextMessage(
+    cfg: WhatsAppConfig,
+    toPhone: string,
+    messageText: string,
+  ) {
+    const cleanPhone = toPhone.replace(/[^0-9]/g, '');
+    const phoneWithCode = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
+
+    if (cfg.enabled && cfg.phoneNumberId && cfg.accessToken) {
+      try {
+        const res = await fetch(`https://graph.facebook.com/v19.0/${cfg.phoneNumberId}/messages`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${cfg.accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            messaging_product: 'whatsapp',
+            to: phoneWithCode,
+            type: 'text',
+            text: { body: messageText },
+          }),
+        });
+        const json = await res.json();
+        return { success: res.ok, result: json, phone: phoneWithCode };
+      } catch (err: any) {
+        return { success: false, error: err.message, phone: phoneWithCode };
+      }
+    }
+
+    return {
+      success: true,
+      simulated: true,
+      phone: phoneWithCode,
+      messagePreview: messageText,
+    };
+  }
+
+  /**
+   * Automated Birthday & Marriage Anniversary Offer Engine
+   * Strictly filters for customers with customer permission (whatsappOptIn = true)
+   */
+  async dispatchCelebrationOffers(branchId: string, dryRun = false) {
+    const cfg = this.getConfig(branchId);
+    const branch = await this.prisma.branch.findUnique({
+      where: { id: branchId },
+      include: { restaurant: true },
+    });
+
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentDate = now.getDate();
+
+    const candidates = await this.prisma.customer.findMany({
+      where: {
+        branchId,
+        whatsappOptIn: true,
+        marketingOptOut: false,
+        phone: { not: null },
+        OR: [{ birthday: { not: null } }, { anniversary: { not: null } }],
+      },
+    });
+
+    const restaurantName = branch?.restaurant.name || 'BillBaaz';
+    const dispatches: Array<{
+      customerId: string;
+      customerName: string;
+      phone: string;
+      type: 'BIRTHDAY' | 'ANNIVERSARY';
+      message: string;
+      status: string;
+    }> = [];
+
+    for (const c of candidates) {
+      if (!c.phone) continue;
+
+      // Check Birthday
+      if (cfg.sendBirthdayOffers && c.birthday) {
+        const bDate = new Date(c.birthday);
+        if (bDate.getMonth() === currentMonth && bDate.getDate() === currentDate) {
+          const coupon = cfg.birthdayCouponCode || 'BDAY15';
+          const offer = cfg.birthdayOfferNote || '15% OFF on dining bill + Complimentary Birthday Dessert 🎂';
+          const msg = `🎂 *Happy Birthday, ${c.name || 'Valued Guest'}!* 🎉\nWishing you a joyful day filled with happiness and laughter!\n\nCelebrate your special day with us at *${restaurantName}*:\n🎁 *Exclusive Birthday Offer:* ${offer}\n🏷️ Coupon Code: *${coupon}*\n\n_Show this message to your server when dining with us._\nValid today only! We look forward to celebrating with you! 🎈\n\n_Powered by BillBaaz (Billing ka baazigar)_`;
+
+          if (dryRun) {
+            dispatches.push({
+              customerId: c.id,
+              customerName: c.name || 'Customer',
+              phone: c.phone,
+              type: 'BIRTHDAY',
+              message: msg,
+              status: 'PREVIEW',
+            });
+          } else {
+            const res = await this.dispatchTextMessage(cfg, c.phone, msg);
+            dispatches.push({
+              customerId: c.id,
+              customerName: c.name || 'Customer',
+              phone: c.phone,
+              type: 'BIRTHDAY',
+              message: msg,
+              status: res.success ? 'SENT' : 'FAILED',
+            });
+          }
+        }
+      }
+
+      // Check Anniversary
+      if (cfg.sendAnniversaryOffers && c.anniversary) {
+        const aDate = new Date(c.anniversary);
+        if (aDate.getMonth() === currentMonth && aDate.getDate() === currentDate) {
+          const coupon = cfg.anniversaryCouponCode || 'ANNI15';
+          const offer = cfg.anniversaryOfferNote || '15% OFF on celebration dinner + Chef Special Treat 💑';
+          const msg = `💑 *Happy Marriage Anniversary, ${c.name || 'Valued Guest'}!* ✨\nWishing you and your partner many more years of love, togetherness, and wonderful moments!\n\nMake your anniversary celebration delicious and memorable at *${restaurantName}*:\n🎁 *Anniversary Special Offer:* ${offer}\n🏷️ Coupon Code: *${coupon}*\n\n_Show this message to your server when dining with us._\nValid for your anniversary week! Table reservations open now! 🥂\n\n_Powered by BillBaaz (Billing ka baazigar)_`;
+
+          if (dryRun) {
+            dispatches.push({
+              customerId: c.id,
+              customerName: c.name || 'Customer',
+              phone: c.phone,
+              type: 'ANNIVERSARY',
+              message: msg,
+              status: 'PREVIEW',
+            });
+          } else {
+            const res = await this.dispatchTextMessage(cfg, c.phone, msg);
+            dispatches.push({
+              customerId: c.id,
+              customerName: c.name || 'Customer',
+              phone: c.phone,
+              type: 'ANNIVERSARY',
+              message: msg,
+              status: res.success ? 'SENT' : 'FAILED',
+            });
+          }
+        }
+      }
+    }
+
+    return {
+      success: true,
+      totalCelebrantsToday: dispatches.length,
+      dispatches,
+    };
+  }
+
+  /**
+   * Send single customer celebration wish on-demand
+   */
+  async sendCustomerCelebrationWish(
+    branchId: string,
+    customerId: string,
+    type: 'BIRTHDAY' | 'ANNIVERSARY',
+  ) {
+    const cfg = this.getConfig(branchId);
+    const branch = await this.prisma.branch.findUnique({
+      where: { id: branchId },
+      include: { restaurant: true },
+    });
+    const customer = await this.prisma.customer.findUnique({
+      where: { id: customerId },
+    });
+
+    if (!customer || !customer.phone) {
+      return { success: false, error: 'Customer phone number not available' };
+    }
+
+    const restaurantName = branch?.restaurant.name || 'BillBaaz';
+    let message = '';
+
+    if (type === 'BIRTHDAY') {
+      const coupon = cfg.birthdayCouponCode || 'BDAY15';
+      const offer = cfg.birthdayOfferNote || '15% OFF on dining bill + Complimentary Birthday Dessert 🎂';
+      message = `🎂 *Happy Birthday, ${customer.name || 'Valued Guest'}!* 🎉\nWishing you a joyful day filled with happiness and laughter!\n\nCelebrate your special day with us at *${restaurantName}*:\n🎁 *Exclusive Birthday Offer:* ${offer}\n🏷️ Coupon Code: *${coupon}*\n\n_Show this message to your server when dining with us._\nValid today only! We look forward to celebrating with you! 🎈\n\n_Powered by BillBaaz (Billing ka baazigar)_`;
+    } else {
+      const coupon = cfg.anniversaryCouponCode || 'ANNI15';
+      const offer = cfg.anniversaryOfferNote || '15% OFF on celebration dinner + Chef Special Treat 💑';
+      message = `💑 *Happy Marriage Anniversary, ${customer.name || 'Valued Guest'}!* ✨\nWishing you and your partner many more years of love, togetherness, and wonderful moments!\n\nMake your anniversary celebration delicious and memorable at *${restaurantName}*:\n🎁 *Anniversary Special Offer:* ${offer}\n🏷️ Coupon Code: *${coupon}*\n\n_Show this message to your server when dining with us._\nValid for your anniversary week! Table reservations open now! 🥂\n\n_Powered by BillBaaz (Billing ka baazigar)_`;
+    }
+
+    return this.dispatchTextMessage(cfg, customer.phone, message);
+  }
+
+  /**
+   * Automatic Morning Cron Job: Send Birthday and Anniversary greetings & offers at 9:00 AM daily
+   */
+  @Cron('0 9 * * *')
+  async handleDailyCelebrationsCron() {
+    this.logger.log('Starting automated 9:00 AM Birthday & Anniversary WhatsApp celebration dispatch...');
+    try {
+      const branches = await this.prisma.branch.findMany({
+        select: { id: true, name: true, restaurant: { select: { name: true } } },
+      });
+
+      for (const branch of branches) {
+        const cfg = this.getConfig(branch.id);
+        if (cfg.enabled && (cfg.sendBirthdayOffers || cfg.sendAnniversaryOffers)) {
+          this.logger.log(`Running celebrations dispatch for ${branch.restaurant.name} (${branch.name})...`);
+          await this.dispatchCelebrationOffers(branch.id);
+        }
+      }
+    } catch (err: any) {
+      this.logger.error(`Morning celebrations cron failed: ${err.message}`);
+    }
   }
 
   /**
