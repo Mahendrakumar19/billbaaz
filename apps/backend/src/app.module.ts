@@ -44,6 +44,7 @@ import { McpModule } from './mcp/mcp.module';
 import { SystemModule } from './system/system.module';
 import { VerifactuModule } from './modules/verifactu/verifactu.module';
 import { WhatsAppModule } from './modules/whatsapp/whatsapp.module';
+import { SuperAdminModule } from './modules/super-admin/super-admin.module';
 
 @Module({
   imports: [
@@ -79,6 +80,7 @@ import { WhatsAppModule } from './modules/whatsapp/whatsapp.module';
     SyncModule,
     VerifactuModule,
     WhatsAppModule,
+    SuperAdminModule,
     UsersModule,
     PermissionsModule,
     AuditModule,

@@ -43,6 +43,20 @@ export default function DashboardGroupLayout({ children }: { children: React.Rea
     if (!allowed && fallback && fallback !== pathname) router.replace(fallback);
   }, [allowed, fallback, pathname, router]);
 
+  // Commercial License & Subscription Paywall Enforcement
+  const isPlatformManager = Boolean(data?.user?.isSuperAdmin || data?.user?.isPlatformOwner);
+  const isSuspended = data?.user?.subscriptionStatus === "SUSPENDED";
+  const isExpired = Boolean(
+    data?.user?.subscriptionEndsAt &&
+      new Date(data.user.subscriptionEndsAt).getTime() < Date.now(),
+  );
+
+  useEffect(() => {
+    if (!isPlatformManager && (isSuspended || isExpired) && pathname !== "/subscription-expired") {
+      router.replace("/subscription-expired");
+    }
+  }, [isPlatformManager, isSuspended, isExpired, pathname, router]);
+
   if (isLoading) {
     return <div className="flex min-h-screen items-center justify-center bg-background" />;
   }

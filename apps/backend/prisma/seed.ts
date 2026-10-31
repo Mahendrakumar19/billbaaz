@@ -76,7 +76,13 @@ async function main() {
   console.log('Creating demo restaurant + branch...');
   const restaurant = await prisma.restaurant.upsert({
     where: { id: 'demo-restaurant' },
-    update: { name: 'BillBaaz Grand Cafe', currency: 'INR' },
+    update: {
+      name: 'BillBaaz Grand Cafe',
+      currency: 'INR',
+      isPlatformOwner: true,
+      subscriptionStatus: 'ACTIVE',
+      subscriptionPlan: 'ENTERPRISE',
+    },
     create: {
       id: 'demo-restaurant',
       name: 'BillBaaz Grand Cafe',
@@ -149,6 +155,7 @@ async function main() {
       email: 'owner@demo.local',
       passwordHash,
       pinHash,
+      isSuperAdmin: true,
     },
   });
 
@@ -168,6 +175,7 @@ async function main() {
     update: {
       passwordHash,
       pinHash,
+      isSuperAdmin: true,
     },
     create: {
       restaurantId: restaurant.id,
@@ -176,6 +184,7 @@ async function main() {
       email: 'admin@billbaaz.com',
       passwordHash,
       pinHash,
+      isSuperAdmin: true,
     },
   });
 

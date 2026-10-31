@@ -35,6 +35,20 @@ enum TaxRegime {
 // this is the ONLY place the mode changes the pricing math; everything
 // downstream of that (OrderItem.lineTotal, receipts, refunds) keeps
 // working off an already-inclusive amount exactly as before.
+enum SubscriptionStatus {
+  TRIAL
+  ACTIVE
+  PAST_DUE
+  SUSPENDED
+  CANCELLED
+}
+
+enum SubscriptionPlan {
+  STARTER
+  PRO
+  ENTERPRISE
+}
+
 enum TaxMode {
   INCLUSIVE
   EXCLUSIVE
@@ -64,6 +78,15 @@ model Restaurant {
   // many currency units of net spend earn 1 point (floor division).
   loyaltyPointValue      Decimal @default(1) @db.Decimal(6, 2)
   loyaltyEarnPerCurrency Int     @default(100)
+
+  // SaaS Commercial Licensing & Subscription Engine
+  subscriptionStatus SubscriptionStatus @default(TRIAL)
+  subscriptionPlan   SubscriptionPlan   @default(STARTER)
+  subscriptionEndsAt DateTime?
+  trialEndsAt        DateTime?
+  isPlatformOwner    Boolean            @default(false)
+  monthlyFeeAmount   Decimal            @default(799) @db.Decimal(10, 2)
+  billingNotes       String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -241,6 +264,7 @@ model User {
   passwordHash            String
   pinHash                 String? // quick-switch PIN login on a shared terminal
   isActive                Boolean  @default(true)
+  isSuperAdmin            Boolean  @default(false)
   twoFactorSecret         String? // AES-GCM sealed TOTP secret (see auth/totp.ts)
   twoFactorEnabled        Boolean  @default(false)
   twoFactorRecoveryHashes String[] @default([]) // bcrypt hashes of unused one-time recovery codes

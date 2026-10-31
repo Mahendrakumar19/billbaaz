@@ -32,6 +32,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const user = await this.prisma.user.findUnique({
       where: { id: payload.sub },
       include: {
+        restaurant: true,
         role: { include: { permissions: { include: { permission: true } } } },
       },
     });
@@ -47,6 +48,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       roleId: user.roleId,
       roleName: user.role.name,
       permissions: user.role.permissions.map((rp) => rp.permission.key),
+      isSuperAdmin: user.isSuperAdmin || user.restaurant.isPlatformOwner,
+      subscriptionStatus: user.restaurant.subscriptionStatus,
+      subscriptionPlan: user.restaurant.subscriptionPlan,
+      subscriptionEndsAt: user.restaurant.subscriptionEndsAt,
+      isPlatformOwner: user.restaurant.isPlatformOwner,
     };
   }
 }

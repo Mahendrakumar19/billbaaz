@@ -30,6 +30,11 @@ export const sessionUserSchema = z.object({
   roleId: z.string(),
   roleName: z.string(),
   permissions: z.array(z.string()),
+  isSuperAdmin: z.boolean().default(false).optional(),
+  subscriptionStatus: z.string().optional(),
+  subscriptionPlan: z.string().optional(),
+  subscriptionEndsAt: z.coerce.date().optional().nullable(),
+  isPlatformOwner: z.boolean().default(false).optional(),
 });
 export type SessionUser = z.infer<typeof sessionUserSchema>;
 

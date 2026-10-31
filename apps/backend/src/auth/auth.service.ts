@@ -94,7 +94,15 @@ export class AuthService {
 
     const owner = await this.prisma.$transaction(async (tx) => {
       const restaurant = await tx.restaurant.create({
-        data: { name: dto.restaurantName },
+        data: {
+          name: dto.restaurantName,
+          subscriptionStatus: 'TRIAL',
+          subscriptionPlan: 'STARTER',
+          trialEndsAt: new Date(Date.now() + 14 * 86_400_000),
+          subscriptionEndsAt: new Date(Date.now() + 14 * 86_400_000),
+          isPlatformOwner: false,
+          monthlyFeeAmount: 799,
+        },
       });
       const branch = await tx.branch.create({
         data: { restaurantId: restaurant.id, name: dto.branchName },
