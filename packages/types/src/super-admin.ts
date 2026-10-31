@@ -30,3 +30,4 @@ export interface PlatformStats {
   totalMonthlyRevenue: number;
   totalOrdersCount: number;
 }
+

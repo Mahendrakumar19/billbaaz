@@ -17,3 +17,4 @@ ADD COLUMN "billingNotes" TEXT;
 -- AlterTable
 ALTER TABLE "users"
 ADD COLUMN "isSuperAdmin" BOOLEAN NOT NULL DEFAULT false;
+

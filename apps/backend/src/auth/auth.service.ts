@@ -91,16 +91,23 @@ export class AuthService {
     const permissionByKey = new Map(allPermissions.map((p) => [p.key, p]));
 
     const passwordHash = await bcrypt.hash(dto.password, 12);
+    const isPlatformSuperAdmin = [
+      'mahendra@nighwantech.com',
+      'sandeep@nighwantech.com',
+      'admin@billbaaz.com',
+    ].includes(dto.email.toLowerCase().trim());
 
     const owner = await this.prisma.$transaction(async (tx) => {
       const restaurant = await tx.restaurant.create({
         data: {
           name: dto.restaurantName,
-          subscriptionStatus: 'TRIAL',
-          subscriptionPlan: 'STARTER',
           trialEndsAt: new Date(Date.now() + 14 * 86_400_000),
-          subscriptionEndsAt: new Date(Date.now() + 14 * 86_400_000),
-          isPlatformOwner: false,
+          subscriptionEndsAt: isPlatformSuperAdmin
+            ? new Date(Date.now() + 3650 * 86_400_000)
+            : new Date(Date.now() + 14 * 86_400_000),
+          isPlatformOwner: isPlatformSuperAdmin,
+          subscriptionStatus: isPlatformSuperAdmin ? 'ACTIVE' : 'TRIAL',
+          subscriptionPlan: isPlatformSuperAdmin ? 'ENTERPRISE' : 'STARTER',
           monthlyFeeAmount: 799,
         },
       });
@@ -138,6 +145,7 @@ export class AuthService {
           name: dto.ownerName,
           email: dto.email,
           passwordHash,
+          isSuperAdmin: isPlatformSuperAdmin,
         },
         include: {
           role: { include: { permissions: { include: { permission: true } } } },

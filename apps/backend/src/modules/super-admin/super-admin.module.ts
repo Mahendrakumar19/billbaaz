@@ -20,3 +20,4 @@ import { SuperAdminGuard } from './super-admin.guard';
   exports: [SuperAdminService],
 })
 export class SuperAdminModule {}
+

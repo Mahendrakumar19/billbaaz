@@ -166,3 +166,4 @@ export class SuperAdminService {
     return { token, ownerName: owner.name, restaurantId: targetRestaurantId };
   }
 }
+

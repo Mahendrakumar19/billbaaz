@@ -196,6 +196,79 @@ async function main() {
     create: { userId: adminBillbaaz.id, branchId: branch.id },
   });
 
+  console.log('Seeding Nighwan Technology platform admin accounts...');
+  const mahendraHash = await bcrypt.hash('Mahendra@19', 12);
+  const mahendraPinHash = await bcrypt.hash('1919', 12);
+  const mahendraUser = await prisma.user.upsert({
+    where: {
+      restaurantId_email: {
+        restaurantId: restaurant.id,
+        email: 'mahendra@nighwantech.com',
+      },
+    },
+    update: {
+      name: 'Mahendra Kumar',
+      passwordHash: mahendraHash,
+      pinHash: mahendraPinHash,
+      isSuperAdmin: true,
+      isActive: true,
+    },
+    create: {
+      restaurantId: restaurant.id,
+      roleId: ownerRoleId,
+      name: 'Mahendra Kumar',
+      email: 'mahendra@nighwantech.com',
+      passwordHash: mahendraHash,
+      pinHash: mahendraPinHash,
+      isSuperAdmin: true,
+      isActive: true,
+    },
+  });
+
+  await prisma.userBranch.upsert({
+    where: {
+      userId_branchId: { userId: mahendraUser.id, branchId: branch.id },
+    },
+    update: {},
+    create: { userId: mahendraUser.id, branchId: branch.id },
+  });
+
+  const sandeepHash = await bcrypt.hash('Nighwan@804421', 12);
+  const sandeepPinHash = await bcrypt.hash('8044', 12);
+  const sandeepUser = await prisma.user.upsert({
+    where: {
+      restaurantId_email: {
+        restaurantId: restaurant.id,
+        email: 'sandeep@nighwantech.com',
+      },
+    },
+    update: {
+      name: 'Sandeep Kumar',
+      passwordHash: sandeepHash,
+      pinHash: sandeepPinHash,
+      isSuperAdmin: true,
+      isActive: true,
+    },
+    create: {
+      restaurantId: restaurant.id,
+      roleId: ownerRoleId,
+      name: 'Sandeep Kumar',
+      email: 'sandeep@nighwantech.com',
+      passwordHash: sandeepHash,
+      pinHash: sandeepPinHash,
+      isSuperAdmin: true,
+      isActive: true,
+    },
+  });
+
+  await prisma.userBranch.upsert({
+    where: {
+      userId_branchId: { userId: sandeepUser.id, branchId: branch.id },
+    },
+    update: {},
+    create: { userId: sandeepUser.id, branchId: branch.id },
+  });
+
   console.log('Seeding floor + tables...');
   const floor = await prisma.floor.upsert({
     where: { id: 'demo-floor' },

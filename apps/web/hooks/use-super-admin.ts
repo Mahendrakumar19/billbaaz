@@ -84,3 +84,4 @@ export function useImpersonateRestaurant() {
     mutationFn: (id: string) => api.post(`/super-admin/restaurants/${id}/impersonate`),
   });
 }
+
