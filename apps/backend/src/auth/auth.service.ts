@@ -73,7 +73,7 @@ export class AuthService {
 
   async register(dto: RegisterDto) {
     const existing = await this.prisma.user.findFirst({
-      where: { email: dto.email },
+      where: { email: { equals: dto.email.trim(), mode: 'insensitive' } },
     });
     if (existing) {
       throw new BadRequestException(
@@ -146,7 +146,7 @@ export class AuthService {
           restaurantId: restaurant.id,
           roleId: ownerRoleId,
           name: dto.ownerName,
-          email: dto.email,
+          email: dto.email.trim().toLowerCase(),
           passwordHash,
           isSuperAdmin: isPlatformSuperAdmin,
         },
